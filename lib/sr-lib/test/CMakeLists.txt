@@ -1,5 +1,5 @@
 # CMake version
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.5)
 
 # project name
 project (sr-lib-flow-control-test)
@@ -11,7 +11,7 @@ include_directories(../src)
 link_directories(../bin)
 
 # main goal
-add_executable(main main.c)
+add_executable(main.exe main.c)
 
 # linked libraries
-target_link_libraries(main sr-lib-flow-control)
+target_link_libraries(main.exe sr-lib-flow-control)
