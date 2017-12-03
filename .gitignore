@@ -30,3 +30,5 @@
 
 # Debug files
 *.dSYM/
+
+lib/integer-serialization/src/documentation/
