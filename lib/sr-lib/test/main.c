@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 // srlib
-#include "flow_control.h"
+#include "flow-control.h"
 
 FlwSt     fail() { return FLW_ST.failed;     }
 FlwSt    crash() { return FLW_ST.crashed;    }

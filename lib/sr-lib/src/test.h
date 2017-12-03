@@ -1,11 +1,12 @@
 #ifndef SRLIB_TEST_HEADER
 #define SRLIB_TEST_HEADER
 
-// srlib
-#include "flow_control.h"
 // libc
 #include <stdio.h>
 #include <stdlib.h>
+
+// srlib
+#include "flow-control.h"
 
 #define NEW_TEST(name) \
 	FlwSt name () {
