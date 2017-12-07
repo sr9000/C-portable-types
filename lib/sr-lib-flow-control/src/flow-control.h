@@ -1,5 +1,3 @@
-#ifndef SRLIB_FLOW_CONTROL_HEADER
-#define SRLIB_FLOW_CONTROL_HEADER
 
 /**
  * @file flow-control.h
@@ -9,6 +7,9 @@
  * Also there are several constants, that indicated status of flow. Finally
  * there are functions, that provides way to check status of execution flow.
  */
+
+#ifndef SRLIB_FLOW_CONTROL_HEADER
+#define SRLIB_FLOW_CONTROL_HEADER
 
 #include <stdbool.h>
 #include <stdint.h>
