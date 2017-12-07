@@ -2,7 +2,10 @@
 cmake_minimum_required (VERSION 3.5)
 
 # project name
-project (sr-lib-flow-control-test)
+project(sr-lib-flow-control-test)
+
+# dependency
+add_subdirectory(../bin)
 
 # *.h files directories
 include_directories(../src)
