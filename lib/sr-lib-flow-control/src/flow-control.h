@@ -1,25 +1,35 @@
 #ifndef SRLIB_FLOW_CONTROL_HEADER
 #define SRLIB_FLOW_CONTROL_HEADER
 
-// libc
+/**
+ * @file flow-control.h
+ * @author Rogonov Stepan Alekseevich
+ * @brief File containing definitions of execution flow control functions.
+ * @details Defines structures and types, that should be return from functions.
+ * Also there are several constants, that indicated status of flow. Finally
+ * there are functions, that provides way to check status of execution flow.
+ */
+
 #include <stdbool.h>
 
 // check we have "bool" "true" and "false" macroses
 #if __bool_true_false_are_defined != 1
-#error Can not be compiled cause <stdbool.h> did not \
-implement "bool", "true" and "false" macroses in some reason. \
-Please, check your platform/architecture/compilator and official vendors \
-information to find that reason.
+#error "Can not be compiled cause <stdbool.h> did not "\
+       "implement \"bool\", \"true\" and \"false\" macroses in some reason. "\
+       "Please, check your platform/architecture/compilator and official "\
+       "vendors information to find that reason."
 #endif
 
 // defines type, that used
 // to store execution flow states
 struct struct_flow_state;
-typedef struct struct_flow_state
+typedef
+struct struct_flow_state
 	                FlwSt
 	, *            pFlwSt
 	, * restrict  rpFlwSt;
-typedef const struct struct_flow_state
+typedef const
+struct struct_flow_state
 	               cFlwSt
 	, *           pcFlwSt
 	, * restrict rpcFlwSt;
