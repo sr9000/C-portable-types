@@ -8,8 +8,8 @@
  * platforms: integer always serialized in big-endian format.
  */
 
-#ifndef INTEGER_SERIALIZATION_H
-#define INTEGER_SERIALIZATION_H
+#ifndef INTEGER_SERIALIZATION_HEADER
+#define INTEGER_SERIALIZATION_HEADER
 
 #include <stdint.h>
 
@@ -327,4 +327,4 @@ deserialize_uint64_t(
 );
 #endif //INT64_MAX
 
-#endif //INTEGER_SERIALIZATION_H
+#endif //INTEGER_SERIALIZATION_HEADER

@@ -1,12 +1,9 @@
-#ifndef INTEGER_SERIALIZATION_H
-#define INTEGER_SERIALIZATION_H
-
 #include "integer-serialization.h"
 
 void*
 serialize_int8_t(
-   void *address_to_serialize
- , int8_t value
+	  void *address_to_serialize
+	, int8_t value
 ) {
 	int8_t *p = (int8_t*)address_to_serialize;
 	(*p) = value;
@@ -15,8 +12,8 @@ serialize_int8_t(
 
 void*
 deserialize_int8_t(
-   int8_t &value
- , void *address_to_deserialize
+	  int8_t &value
+	, void *address_to_deserialize
 ) {
 	int8_t *p = (int8_t*)address_to_serialize;
 	value = *p;
@@ -25,8 +22,8 @@ deserialize_int8_t(
 
 void*
 serialize_uint8_t(
-   void *address_to_serialize
- , uint8_t value
+	  void *address_to_serialize
+	, uint8_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	(*p) = value;
@@ -35,8 +32,8 @@ serialize_uint8_t(
 
 void*
 deserialize_uint8_t(
-   uint8_t &value
- , void *address_to_deserialize
+	  uint8_t &value
+	, void *address_to_deserialize
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	value = *p;
@@ -47,8 +44,8 @@ deserialize_uint8_t(
 
 void*
 serialize_int16_t(
-   void *address_to_serialize
- , int16_t value
+	  void *address_to_serialize
+	, int16_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	(*p) = (uint8_t)(0xff & (value>>8));
@@ -59,8 +56,8 @@ serialize_int16_t(
 
 void*
 deserialize_int16_t(
-   int16_t &value
- , void *address_to_deserialize
+	  int16_t &value
+	, void *address_to_deserialize
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	uint16_t h, l;
@@ -72,8 +69,8 @@ deserialize_int16_t(
 
 void*
 serialize_uint16_t(
-   void *address_to_serialize
- , uint16_t value
+	  void *address_to_serialize
+	, uint16_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	(*p) = (uint8_t)(0xff & (value>>8));
@@ -84,8 +81,8 @@ serialize_uint16_t(
 
 void*
 deserialize_uint16_t(
-   uint16_t &value
- , void *address_to_deserialize
+	  uint16_t &value
+	, void *address_to_deserialize
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	uint16_t h, l;
@@ -100,8 +97,8 @@ deserialize_uint16_t(
 
 void*
 serialize_int32_t(
-   void *address_to_serialize
- , int32_t value
+	  void *address_to_serialize
+	, int32_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	(*p) = (uint8_t)(0xff & (value>>24));
@@ -116,8 +113,8 @@ serialize_int32_t(
 
 void*
 deserialize_int32_t(
-   int32_t &value
- , void *address_to_deserialize
+	  int32_t &value
+	, void *address_to_deserialize
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	uint32_t hh, hl, lh, ll;
@@ -131,8 +128,8 @@ deserialize_int32_t(
 
 void*
 serialize_uint32_t(
-   void *address_to_serialize
- , uint32_t value
+	  void *address_to_serialize
+	, uint32_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	(*p) = (uint8_t)(0xff & (value>>24));
@@ -147,8 +144,8 @@ serialize_uint32_t(
 
 void*
 deserialize_uint32_t(
-   uint32_t &value
- , void *address_to_deserialize
+	  uint32_t &value
+	, void *address_to_deserialize
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	uint32_t hh, hl, lh, ll;
@@ -165,8 +162,8 @@ deserialize_uint32_t(
 
 void*
 serialize_int64_t(
-   void *address_to_serialize
- , int64_t value
+	  void *address_to_serialize
+	, int64_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	(*p) = (uint8_t)(0xff & (value>>56));
@@ -189,8 +186,8 @@ serialize_int64_t(
 
 void*
 deserialize_int64_t(
-   int64_t &value
- , void *address_to_deserialize
+	  int64_t &value
+	, void *address_to_deserialize
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	uint64_t hhh, hhl, hlh, hll, lhh, lhl, llh, lll;
@@ -209,8 +206,8 @@ deserialize_int64_t(
 
 void*
 serialize_uint64_t(
-   void *address_to_serialize
- , uint64_t value
+	  void *address_to_serialize
+	, uint64_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	(*p) = (uint8_t)(0xff & (value>>56));
@@ -233,8 +230,8 @@ serialize_uint64_t(
 
 void*
 deserialize_uint64_t(
-   uint64_t &value
- , void *address_to_deserialize
+	  uint64_t &value
+	, void *address_to_deserialize
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
 	uint64_t hhh, hhl, hlh, hll, lhh, lhl, llh, lll;

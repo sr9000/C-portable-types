@@ -11,8 +11,9 @@
  */
 
 #include <stdbool.h>
+#include <stdint.h>
 
-// check we have "bool" "true" and "false" macroses
+// check existing "bool" "true" and "false" macroses
 #if __bool_true_false_are_defined != 1
 #error "Can not be compiled cause <stdbool.h> did not "\
        "implement \"bool\", \"true\" and \"false\" macroses in some reason. "\
@@ -20,73 +21,117 @@
        "vendors information to find that reason."
 #endif
 
-// defines type, that used
-// to store execution flow states
+
 struct struct_flow_state;
+
 typedef
 struct struct_flow_state
-	                FlwSt
-	, *            pFlwSt
-	, * restrict  rpFlwSt;
+	                FlwSt /// Alias for \ref struct_flow_state.
+	, *            pFlwSt /// Pointer onto \ref struct_flow_state.
+	, * restrict  rpFlwSt /// Restrict pointer onto \ref struct_flow_state.
+	;
+
+
 typedef const
 struct struct_flow_state
-	               cFlwSt
-	, *           pcFlwSt
-	, * restrict rpcFlwSt;
+	               cFlwSt /// Constant variant of \ref FlwSt.
+	, *           pcFlwSt /// Constant variant of \ref pFlwSt.
+	, * restrict rpcFlwSt /// Constant variant of \ref rpFlwSt.
+	;
+
+/**
+ * @brief Defines type, that used to store execution flow state.
+ */
 struct struct_flow_state
 {
-	int val;
+	int val; ///< Flow state.
 };
 
-// Defines values, that used
-// in execution flow control
+
 const static struct
 {
 	cFlwSt
-		  succeeded // execution flow is OK
-		, failed    // execution flow detects logic error
-		            //   and falls into unimplemented case
-		, crashed   // execution flow detects error, but
-		            //   side effects can not be undone
-		            //   memory leaks are very possible!
+		  succeeded /// Constant field of \ref FLW_ST, that
+		            ///< indicates successful execution flow finishing.
+		            ///< @code{.c} FlwSt state = FLW_ST.succeeded; @endcode
+		            ///<
+		, failed    /// Constant field of \ref FLW_ST, that
+		            ///< indicates execution flow falling into an unimplemented
+		            ///< case because a logic error was detected.
+		            ///< @code{.c} FlwSt state = FLW_ST.failed; @endcode
+		            ///<
+		, crashed   /// Constant field of \ref FLW_ST, that indicates
+		            ///< an error with irreversible side effects
+		            ///< and memory leaks possibility.
+		            ///< @code{.c} FlwSt state = FLW_ST.crashed; @endcode
+		            ///<
 		;
 }
+/**
+ * @var FLW_ST
+ * @brief Defines constant values, that used in execution flow control
+ * @hideinitializer
+ * @code{.c}
+ * int n;
+ * scanf("%d", &n);
+ * if (n <= 0)
+ * 	return FLW_ST.failed;
+ * void *mem = malloc();
+ * if (mem == NULL)
+ * 	return FLW_ST.crashed;
+ * free(mem);
+ * return FLW_ST.succeeded;
+ * @endcode
+ */
 FLW_ST = {
 	  .succeeded  = { .val =  1 }
 	, .failed     = { .val =  0 }
 	, .crashed    = { .val = -1 }
 };
 
-#ifndef BUILD_SRLIB
-	extern
-#endif
+/**
+ * @brief returns, only if flow finished successfully.
+ * @param flw_st [in] flow execution result.
+ * @return <b>true</b>, if flow finished successfully.
+ * <b>false</b> in all other cases.
+ */
 bool
-is_flow_succeeded( // O(1)
-	cFlwSt register flw_st // state which need to be checked
+is_flow_succeeded(
+	cFlwSt register flw_st
 );
 
-#ifndef BUILD_SRLIB
-	extern
-#endif
+/**
+ * @brief returns, if any errors occurred
+ * @param flw_st [in] flow execution result.
+ * @return inverse result of \ref is_flow_succeeded.
+ * <b>false</b>, if flow finished successfully.
+ * <b>true</b> in all other cases.
+ */
 bool
-is_flow_not_succeeded( // O(1)
-	cFlwSt register flw_st // state which need to be checked
+is_flow_not_succeeded(
+	cFlwSt register flw_st
 );
 
-#ifndef BUILD_SRLIB
-	extern
-#endif
+/**
+ * @brief returns, only if logic error detected.
+ * @param flw_st [in] flow execution result.
+ * @return <b>true</b>, if logic error detected.
+ * <b>false</b> in all other cases.
+ */
 bool
-is_flow_failed( // O(1)
-	cFlwSt register flw_st // state which need to be checked
+is_flow_failed(
+	cFlwSt register flw_st
 );
 
-#ifndef BUILD_SRLIB
-	extern
-#endif
+/**
+ * @brief returns, only if error with irreversible side effects detected.
+ * @param flw_st [in] flow execution result.
+ * @return <b>true</b>, if error with irreversible side effects detected.
+ * <b>false</b> in all other cases.
+ */
 bool
-is_flow_crashed( // O(1)
-	cFlwSt register flw_st // state which need to be checked
+is_flow_crashed(
+	cFlwSt register flw_st
 );
 
 #endif // SRLIB_FLOW_CONTROL_HEADER
