@@ -1,12 +1,11 @@
-#ifndef SRLIB_TEST_HEADER
-#define SRLIB_TEST_HEADER
+#ifndef SRLIB_TEST_MACROSES
+#define SRLIB_TEST_MACROSES
 
-// libc
 #include <stdio.h>
 #include <stdlib.h>
 
-// srlib
 #include "flow-control.h"
+
 
 #define NEW_TEST(name) \
 	FlwSt name () {
@@ -40,4 +39,4 @@ static const int TEST_CHECK_dn = 0;
 		printf("INFO: Test \"" #name "\" SKIPPED.\n"); \
 	}
 
-#endif //SRLIB_TEST_HEADER
+#endif //SRLIB_TEST_MACROSES

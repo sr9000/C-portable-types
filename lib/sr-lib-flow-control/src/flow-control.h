@@ -44,7 +44,12 @@ struct struct_flow_state
  */
 struct struct_flow_state
 {
-	int val; ///< Flow state.
+#ifdef INT_FAST8_MAX
+	int_fast8_t // take fastest integer type
+#else
+	int // or simple int type, if fastest type is not defined on that platform
+#endif
+	val; ///< Flow state.
 };
 
 
@@ -76,7 +81,7 @@ const static struct
  * scanf("%d", &n);
  * if (n <= 0)
  * 	return FLW_ST.failed;
- * void *mem = malloc();
+ * void *mem = malloc(n);
  * if (mem == NULL)
  * 	return FLW_ST.crashed;
  * free(mem);

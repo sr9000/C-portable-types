@@ -48,9 +48,9 @@ serialize_int16_t(
 	, int16_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
-	(*p) = (uint8_t)(0xff & (value>>8));
+	(*p) = (uint8_t)((uint16_t)0xff) & (value>>8));
 	++p;
-	(*p) = (uint8_t)(0xff & value);
+	(*p) = (uint8_t)((uint16_t)0xff) & value);
 	return (void*)(++p);
 }
 
@@ -73,9 +73,9 @@ serialize_uint16_t(
 	, uint16_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
-	(*p) = (uint8_t)(0xff & (value>>8));
+	(*p) = (uint8_t)(((uint16_t)0xff) & (value>>8));
 	++p;
-	(*p) = (uint8_t)(0xff & value);
+	(*p) = (uint8_t)(((uint16_t)0xff) & value);
 	return (void*)(++p);
 }
 
@@ -101,13 +101,13 @@ serialize_int32_t(
 	, int32_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
-	(*p) = (uint8_t)(0xff & (value>>24));
+	(*p) = (uint8_t)(((uint32_t)0xff) & (value>>24));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>16));
+	(*p) = (uint8_t)(((uint32_t)0xff) & (value>>16));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>8));
+	(*p) = (uint8_t)(((uint32_t)0xff) & (value>>8));
 	++p;
-	(*p) = (uint8_t)(0xff & value);
+	(*p) = (uint8_t)(((uint32_t)0xff) & value);
 	return (void*)(++p);
 }
 
@@ -132,13 +132,13 @@ serialize_uint32_t(
 	, uint32_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
-	(*p) = (uint8_t)(0xff & (value>>24));
+	(*p) = (uint8_t)(((uint32_t)0xff) & (value>>24));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>16));
+	(*p) = (uint8_t)(((uint32_t)0xff) & (value>>16));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>8));
+	(*p) = (uint8_t)(((uint32_t)0xff) & (value>>8));
 	++p;
-	(*p) = (uint8_t)(0xff & value);
+	(*p) = (uint8_t)(((uint32_t)0xff) & value);
 	return (void*)(++p);
 }
 
@@ -166,21 +166,21 @@ serialize_int64_t(
 	, int64_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
-	(*p) = (uint8_t)(0xff & (value>>56));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>56));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>48));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>48));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>40));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>40));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>32));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>32));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>24));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>24));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>16));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>16));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>8));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>8));
 	++p;
-	(*p) = (uint8_t)(0xff & value);
+	(*p) = (uint8_t)(((uint64_t)0xff) & value);
 	return (void*)(++p);
 }
 
@@ -210,21 +210,21 @@ serialize_uint64_t(
 	, uint64_t value
 ) {
 	uint8_t *p = (uint8_t*)address_to_serialize;
-	(*p) = (uint8_t)(0xff & (value>>56));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>56));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>48));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>48));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>40));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>40));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>32));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>32));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>24));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>24));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>16));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>16));
 	++p;
-	(*p) = (uint8_t)(0xff & (value>>8));
+	(*p) = (uint8_t)(((uint64_t)0xff) & (value>>8));
 	++p;
-	(*p) = (uint8_t)(0xff & value);
+	(*p) = (uint8_t)(((uint64_t)0xff) & value);
 	return (void*)(++p);
 }
 
