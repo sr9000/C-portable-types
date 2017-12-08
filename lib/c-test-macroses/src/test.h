@@ -3,6 +3,20 @@
  * @file test.h
  * @author Rogonov Stepan Alekseevich
  * @brief File containing several macroses, that simplifies tests writing.
+ * @details Significantly less of "syntax noise".
+ * @code{.c}
+ * NEW_TEST(my_test)
+ * 	if (1 != 1) TEST_FAILURE;
+ * TEST_FINISHED
+ *
+ * NEW_TEST(no_test)
+ * TEST_FINISHED
+ *
+ * INIT_TESTS_CHECKS
+ * 	CHECK_TEST(TEST_CHECK_UP, my_test);
+ * 	CHECK_TEST(TEST_CHECK_dn, no_test);
+ * DONE_TESTS_CHECKS
+ * @endcode
  */
 
 #ifndef SRLIB_TEST_MACROSES
