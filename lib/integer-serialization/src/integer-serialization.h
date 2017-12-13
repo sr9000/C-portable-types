@@ -48,7 +48,7 @@ serialize_int8_t(
  * @code{.c}
  * void *stream = get_stream_for_deserialization();
  * int8_t value;
- * stream = deserialize_int8_t(value, stream);
+ * stream = deserialize_int8_t(&value, stream);
  * @endcode
  * @param [out] value Storage of deserialized int8_t value.
  * @param [in] address_to_deserialize Address, from @p value will be read.
@@ -58,7 +58,7 @@ serialize_int8_t(
  */
 void*
 deserialize_int8_t(
-	  int8_t &value
+	  int8_t *value
 	, void *address_to_deserialize
 );
 
@@ -85,7 +85,7 @@ serialize_uint8_t(
  * @code{.c}
  * void *stream = get_stream_for_deserialization();
  * uint8_t value;
- * stream = deserialize_uint8_t(value, stream);
+ * stream = deserialize_uint8_t(&value, stream);
  * @endcode
  * @param [out] value Storage of deserialized uint8_t value.
  * @param [in] address_to_deserialize Address, from @p value will be read.
@@ -95,7 +95,7 @@ serialize_uint8_t(
  */
 void*
 deserialize_uint8_t(
-	  uint8_t &value
+	  uint8_t *value
 	, void *address_to_deserialize
 );
 
@@ -123,7 +123,7 @@ serialize_int16_t(
  * @code{.c}
  * void *stream = get_stream_for_deserialization();
  * int16_t value;
- * stream = deserialize_int16_t(value, stream);
+ * stream = deserialize_int16_t(&value, stream);
  * @endcode
  * @param [out] value Storage of deserialized int16_t value.
  * @param [in] address_to_deserialize Address, from @p value will be read.
@@ -133,7 +133,7 @@ serialize_int16_t(
  */
 void*
 deserialize_int16_t(
-	  int16_t &value
+	  int16_t *value
 	, void *address_to_deserialize
 );
 
@@ -160,7 +160,7 @@ serialize_uint16_t(
  * @code{.c}
  * void *stream = get_stream_for_deserialization();
  * uint16_t value;
- * stream = deserialize_uint16_t(value, stream);
+ * stream = deserialize_uint16_t(&value, stream);
  * @endcode
  * @param [out] value Storage of deserialized uint16_t value.
  * @param [in] address_to_deserialize Address, from @p value will be read.
@@ -170,7 +170,7 @@ serialize_uint16_t(
  */
 void*
 deserialize_uint16_t(
-	  uint16_t &value
+	  uint16_t *value
 	, void *address_to_deserialize
 );
 #endif //INT16_MAX
@@ -199,7 +199,7 @@ serialize_int32_t(
  * @code{.c}
  * void *stream = get_stream_for_deserialization();
  * int32_t value;
- * stream = deserialize_int32_t(value, stream);
+ * stream = deserialize_int32_t(&value, stream);
  * @endcode
  * @param [out] value Storage of deserialized int32_t value.
  * @param [in] address_to_deserialize Address, from @p value will be read.
@@ -209,7 +209,7 @@ serialize_int32_t(
  */
 void*
 deserialize_int32_t(
-	  int32_t &value
+	  int32_t *value
 	, void *address_to_deserialize
 );
 
@@ -236,7 +236,7 @@ serialize_uint32_t(
  * @code{.c}
  * void *stream = get_stream_for_deserialization();
  * uint32_t value;
- * stream = deserialize_uint32_t(value, stream);
+ * stream = deserialize_uint32_t(&value, stream);
  * @endcode
  * @param [out] value Storage of deserialized uint32_t value.
  * @param [in] address_to_deserialize Address, from @p value will be read.
@@ -246,7 +246,7 @@ serialize_uint32_t(
  */
 void*
 deserialize_uint32_t(
-	  uint32_t &value
+	  uint32_t *value
 	, void *address_to_deserialize
 );
 #endif //INT32_MAX
@@ -275,7 +275,7 @@ serialize_int64_t(
  * @code{.c}
  * void *stream = get_stream_for_deserialization();
  * int64_t value;
- * stream = deserialize_int64_t(value, stream);
+ * stream = deserialize_int64_t(&value, stream);
  * @endcode
  * @param [out] value Storage of deserialized int64_t value.
  * @param [in] address_to_deserialize Address, from @p value will be read.
@@ -285,7 +285,7 @@ serialize_int64_t(
  */
 void*
 deserialize_int64_t(
-	  int64_t &value
+	  int64_t *value
 	, void *address_to_deserialize
 );
 
@@ -312,7 +312,7 @@ serialize_uint64_t(
  * @code{.c}
  * void *stream = get_stream_for_deserialization();
  * uint64_t value;
- * stream = deserialize_uint64_t(value, stream);
+ * stream = deserialize_uint64_t(&value, stream);
  * @endcode
  * @param [out] value Storage of deserialized uint64_t value.
  * @param [in] address_to_deserialize Address, from @p value will be read.
@@ -322,7 +322,7 @@ serialize_uint64_t(
  */
 void*
 deserialize_uint64_t(
-	  uint64_t &value
+	  uint64_t *value
 	, void *address_to_deserialize
 );
 #endif //INT64_MAX
