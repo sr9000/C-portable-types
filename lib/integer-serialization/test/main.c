@@ -67,7 +67,7 @@ NEW_TEST(type_uint8_t)
 		TEST_FAILURE;
 TEST_FINISHED
 
-#ifdef INT16_MAX
+#ifdef INT16_SERIALIZATION_ALLOWED
 NEW_TEST(type_int16_t)
 	enum {N = 10};
 	int16_t src_val[N] =
@@ -159,9 +159,9 @@ NEW_TEST(type_uint16_t)
 	if (memcmp(src_val, actual_val, N))
 		TEST_FAILURE;
 TEST_FINISHED
-#endif
+#endif // INT16_SERIALIZATION_ALLOWED
 
-#ifdef INT32_MAX
+#ifdef INT32_SERIALIZATION_ALLOWED
 NEW_TEST(type_int32_t)
 	enum {N = 10};
 	int32_t src_val[N] =
@@ -253,9 +253,9 @@ NEW_TEST(type_uint32_t)
 	if (memcmp(src_val, actual_val, N))
 		TEST_FAILURE;
 TEST_FINISHED
-#endif
+#endif // INT32_SERIALIZATION_ALLOWED
 
-#ifdef INT64_MAX
+#ifdef INT64_SERIALIZATION_ALLOWED
 NEW_TEST(type_int64_t)
 	enum {N = 10};
 	int64_t src_val[N] =
@@ -347,21 +347,21 @@ NEW_TEST(type_uint64_t)
 	if (memcmp(src_val, actual_val, N))
 		TEST_FAILURE;
 TEST_FINISHED
-#endif
+#endif // INT64_SERIALIZATION_ALLOWED
 
 INIT_TESTS_CHECKS
 	CHECK_TEST(TEST_CHECK_UP, type_int8_t);
 	CHECK_TEST(TEST_CHECK_UP, type_uint8_t);
-#ifdef INT16_MAX
+#ifdef INT16_SERIALIZATION_ALLOWED
 	CHECK_TEST(TEST_CHECK_UP, type_int16_t);
 	CHECK_TEST(TEST_CHECK_UP, type_uint16_t);
-#endif
-#ifdef INT32_MAX
-CHECK_TEST(TEST_CHECK_UP, type_int32_t);
-CHECK_TEST(TEST_CHECK_UP, type_uint32_t);
-#endif
-#ifdef INT32_MAX
-CHECK_TEST(TEST_CHECK_UP, type_int64_t);
-CHECK_TEST(TEST_CHECK_UP, type_uint64_t);
-#endif
+#endif // INT16_SERIALIZATION_ALLOWED
+#ifdef INT32_SERIALIZATION_ALLOWED
+	CHECK_TEST(TEST_CHECK_UP, type_int32_t);
+	CHECK_TEST(TEST_CHECK_UP, type_uint32_t);
+#endif // INT32_SERIALIZATION_ALLOWED
+#ifdef INT64_SERIALIZATION_ALLOWED
+	CHECK_TEST(TEST_CHECK_UP, type_int64_t);
+	CHECK_TEST(TEST_CHECK_UP, type_uint64_t);
+#endif // INT64_SERIALIZATION_ALLOWED
 DONE_TESTS_CHECKS

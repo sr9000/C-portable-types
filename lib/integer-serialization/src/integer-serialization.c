@@ -40,7 +40,7 @@ deserialize_uint8_t(
 	return (void*)(++p);
 }
 
-#ifdef INT16_MAX
+#ifdef INT16_SERIALIZATION_ALLOWED
 
 void*
 serialize_int16_t(
@@ -91,9 +91,9 @@ deserialize_uint16_t(
 	*value = (h<<8) | l;
 	return (void*)(++p);
 }
-#endif //INT16_MAX
+#endif // INT16_SERIALIZATION_ALLOWED
 
-#ifdef INT32_MAX
+#ifdef INT32_SERIALIZATION_ALLOWED
 
 void*
 serialize_int32_t(
@@ -156,9 +156,9 @@ deserialize_uint32_t(
 	*value = (hh<<24) | (hl<<16) | (lh<<8) | ll;
 	return (void*)(++p);
 }
-#endif //INT32_MAX
+#endif // INT32_SERIALIZATION_ALLOWED
 
-#ifdef INT64_MAX
+#ifdef INT64_SERIALIZATION_ALLOWED
 
 void*
 serialize_int64_t(
@@ -247,4 +247,4 @@ deserialize_uint64_t(
 	         | (lhh<<24) | (lhl<<16) | (llh<< 8) |  lll;
 	return (void*)(++p);
 }
-#endif //INT64_MAX
+#endif // INT64_SERIALIZATION_ALLOWED
