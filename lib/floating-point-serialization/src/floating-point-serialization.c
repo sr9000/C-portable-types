@@ -71,7 +71,7 @@ deserialize_float(
 		case CASE_FPMARK_REGULAR:
 		{
 			rest = ((float)significant_bits) / ((float)INT32_MAX);
-			exp = (int)significant_bits;
+			exp = (int)exponenta;
 			*value = ldexpf(rest, exp);
 		}; break;
 		case CASE_FPMARK_NAN:
@@ -155,7 +155,7 @@ deserialize_double(
 		case CASE_FPMARK_REGULAR:
 		{
 			rest = ((double)significant_bits) / ((double)INT32_MAX);
-			exp = (int)significant_bits;
+			exp = (int)exponenta;
 			*value = ldexp(rest, exp);
 		}; break;
 		case CASE_FPMARK_NAN:
