@@ -16,14 +16,8 @@
 // check int8_t exists
 #ifndef INT8_MAX
 #error "Integer serialization library can not be build, because smalles 8-bit "\
-       "type unsupported on your platform."
-#endif //INT8_MAX
-
-// check uint8_t exists
-#ifndef UINT8_MAX
-#error "Integer serialization library can not be build, because smalles 8-bit "\
-       "type unsupported on your platform."
-#endif //UINT8_MAX
+       "type is unsupported on your platform."
+#endif // INT8_MAX
 
 /**
  * @def INT8_SERIALIZATION_ALLOWED
