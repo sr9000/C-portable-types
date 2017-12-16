@@ -4,6 +4,8 @@ cmake_minimum_required (VERSION 3.5)
 # project name
 project (floating-point-serialization)
 
+set(CMAKE_C_STANDARD 11)
+
 # dependency. put resulting binaries into local directory
 add_subdirectory (../../integer-serialization/bin external-bins-001)
 

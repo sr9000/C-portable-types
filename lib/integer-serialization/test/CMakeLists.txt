@@ -4,6 +4,8 @@ cmake_minimum_required (VERSION 3.5)
 # project name
 project (integer-serialization-test)
 
+set(CMAKE_C_STANDARD 11)
+
 # dependency. put resulting binaries into local directory
 add_subdirectory (../bin external-bins-001)
 add_subdirectory (../../sr-lib-flow-control/bin external-bins-002)

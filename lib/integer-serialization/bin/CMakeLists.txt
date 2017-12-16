@@ -4,6 +4,8 @@ cmake_minimum_required (VERSION 3.5)
 # project name
 project (integer-serialization)
 
+set(CMAKE_C_STANDARD 11)
+
 # *.h files directories
 include_directories (../src)
 
