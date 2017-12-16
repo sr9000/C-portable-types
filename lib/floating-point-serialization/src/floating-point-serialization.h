@@ -38,6 +38,11 @@
        "32-bit integer type serialization is unsupported on your platform."
 #endif // INT16_MAX
 
+#ifndef INT32_MAX
+#error "Floating point serialization library can not be build, because "\
+       "maximum value for int32_t is undefined."
+#endif // INT8_MAX
+
 /**
  * @def FLOAT_SERIALIZATION_ALLOWED
  * @brief Serialization operations allowed for float.
@@ -122,6 +127,10 @@ deserialize_float(
 
 #ifdef INT64_SERIALIZATION_ALLOWED
 
+// check max int64_t value defined.
+// it needs to serialize significant bits in crossplatform like way.
+#ifdef INT64_MAX
+
 /**
  * @def DOUBLE_SERIALIZATION_ALLOWED
  * @brief Serialization operations allowed for double.
@@ -173,6 +182,7 @@ deserialize_double(
 	  double *value
 	, void *address_to_deserialize
 );
+#endif // INT64_MAX
 #endif // INT64_SERIALIZATION_ALLOWED
 
 #endif // FLOATING_POINT_SERIALIZATION_HEADER
