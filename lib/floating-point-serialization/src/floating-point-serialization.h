@@ -51,6 +51,35 @@
 #define SIZE_OF_SERIALIZED_FLOAT 7
 
 /**
+ * @name Indication byte constants.
+ * @{
+ */
+
+/**
+ * @brief Indicates _Not A Number_ value.
+ */
+static const uint8_t FPMARK_NAN = 1;
+
+/**
+ * @brief Indicates _Positive Infinity_ value.
+ */
+static const uint8_t FPMARK_PINF = 2;
+
+/**
+ * @brief Indicates _Negative Infinity_ value.
+ */
+static const uint8_t FPMARK_NINF = 3;
+
+/**
+ * @brief Indicates regular floating point value.
+ */
+static const uint8_t FPMARK_REGULAR = 4;
+
+/**
+ * @}
+ */
+
+/**
  * @brief Serialize float value
  * @code{.c}
  * void *stream = get_stream_for_serialization();
