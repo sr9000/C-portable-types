@@ -1,6 +1,7 @@
 #include <math.h>
 
 #include "floating-point-serialization.h"
+#include "internal-definitions/floating-point-serialization.h"
 
 void*
 serialize_float(
@@ -59,21 +60,21 @@ deserialize_float(
 
 	switch(fpmark)
 	{
-		case FPMARK_PINF:
+		case CASE_FPMARK_PINF:
 		{
 			*value = HUGE_VALF;
 		}; break;
-		case FPMARK_NINF:
+		case CASE_FPMARK_NINF:
 		{
 			*value = -HUGE_VALF;
 		}; break;
-		case FPMARK_REGULAR:
+		case CASE_FPMARK_REGULAR:
 		{
 			rest = ((float)significant_bits) / ((float)INT32_MAX);
 			exp = (int)significant_bits;
 			*value = ldexpf(rest, exp);
 		}; break;
-		case FPMARK_NAN:
+		case CASE_FPMARK_NAN:
 		default:
 		{
 			*value = nanf("");
@@ -143,21 +144,21 @@ deserialize_double(
 
 	switch(fpmark)
 	{
-		case FPMARK_PINF:
+		case CASE_FPMARK_PINF:
 		{
 			*value = HUGE_VAL;
 		}; break;
-		case FPMARK_NINF:
+		case CASE_FPMARK_NINF:
 		{
 			*value = -HUGE_VAL;
 		}; break;
-		case FPMARK_REGULAR:
+		case CASE_FPMARK_REGULAR:
 		{
 			rest = ((double)significant_bits) / ((double)INT32_MAX);
 			exp = (int)significant_bits;
 			*value = ldexp(rest, exp);
 		}; break;
-		case FPMARK_NAN:
+		case CASE_FPMARK_NAN:
 		default:
 		{
 			*value = nan("");
