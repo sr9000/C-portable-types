@@ -1,6 +1,10 @@
 # CMake version
 cmake_minimum_required (VERSION 3.5)
 
+if(TARGET floating-point-serialization)
+	return()
+endif(TARGET floating-point-serialization)
+
 # project name
 project (floating-point-serialization)
 
