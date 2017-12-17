@@ -116,7 +116,7 @@ serialize_double(
 			p = serialize_uint8_t(address_to_serialize, FPMARK_REGULAR);
 			rest = frexp(value, &exp);
 			exponenta = ((int16_t)exp);
-			significant_bits = (int64_t)(rest * ((float)INT64_MAX));
+			significant_bits = (int64_t)(rest * ((double)INT64_MAX));
 		}; break;
 	}
 
@@ -154,7 +154,7 @@ deserialize_double(
 		}; break;
 		case CASE_FPMARK_REGULAR:
 		{
-			rest = ((double)significant_bits) / ((double)INT32_MAX);
+			rest = ((double)significant_bits) / ((double)INT64_MAX);
 			exp = (int)exponenta;
 			*value = ldexp(rest, exp);
 		}; break;
