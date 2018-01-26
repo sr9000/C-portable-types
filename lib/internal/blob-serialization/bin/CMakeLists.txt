@@ -1,12 +1,12 @@
 # CMake version
 cmake_minimum_required (VERSION 3.5)
 
-if(TARGET floating-point-serialization)
+if(TARGET blob-serialization)
 	return()
-endif(TARGET floating-point-serialization)
+endif(TARGET blob-serialization)
 
 # project name
-project (floating-point-serialization)
+project (blob-serialization)
 
 set (CMAKE_C_STANDARD 11)
 
@@ -21,8 +21,8 @@ include_directories (../../integer-serialization/src)
 link_directories (external-bins-001)
 
 # library name and sources
-add_library (floating-point-serialization STATIC
-	../src/floating-point-serialization.c)
+add_library (blob-serialization STATIC
+	../src/blob-serialization.c)
 
 # linked libraries
-target_link_libraries (floating-point-serialization integer-serialization)
+target_link_libraries (blob-serialization integer-serialization)

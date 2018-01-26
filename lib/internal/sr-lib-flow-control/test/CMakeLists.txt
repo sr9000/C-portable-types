@@ -4,7 +4,7 @@ cmake_minimum_required (VERSION 3.5)
 # project name
 project (sr-lib-flow-control-test)
 
-set(CMAKE_C_STANDARD 11)
+set (CMAKE_C_STANDARD 11)
 
 # dependency. put resulting binaries into local directory
 add_subdirectory (../bin external-bins)
