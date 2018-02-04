@@ -19,7 +19,7 @@
 #error "Can not be compiled cause <stdbool.h> did not "\
        "implement \"bool\", \"true\" and \"false\" macroses in some reason. "\
        "Please, check your platform/architecture/compilator and official "\
-       "vendors information to find that reason."
+       "vendors information to find the cause."
 #endif
 
 
