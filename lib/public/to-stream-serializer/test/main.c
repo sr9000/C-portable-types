@@ -2,6 +2,6 @@
 
 int main()
 {
-	stream_t stream;
+	stream_ptr_t stream;
 	return 0;
 }

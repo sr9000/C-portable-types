@@ -14,16 +14,18 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#include "flow-control.h"
+
 // check int8_t exists
 #ifndef INT8_MAX
 #error "To stream serializer library can not be build, because smalles 8-bit "\
        "type is unsupported on your platform."
 #endif // INT8_MAX
 
-typedef void   (*free_ptr_t)     (void *);
-typedef void * (*malloc_ptr_t)   (size_t);
-typedef void * (*calloc_ptr_t)   (size_t, size_t);
-typedef void * (*realloc_ptr_t)  (void *, size_t);
+typedef void   (*free_ptr_t)    (void *);
+typedef void * (*malloc_ptr_t)  (size_t);
+typedef void * (*calloc_ptr_t)  (size_t, size_t);
+typedef void * (*realloc_ptr_t) (void *, size_t);
 
 typedef struct
 {
@@ -31,17 +33,10 @@ typedef struct
 	malloc_ptr_t  pmalloc;
 	calloc_ptr_t  pcalloc;
 	realloc_ptr_t prealloc;
+	void* nullptr_val;
 } mem_allctr_t;
 
-#define MACRO_DEF_MEM_ALLCTR_INITIALIZER \
-{ \
-	  .pfree    = &free \
-	, .pmalloc  = &malloc \
-	, .pcalloc  = &calloc \
-	, .prealloc = &realloc }
-
-const static mem_allctr_t
-DEF_MEM_ALLCTR = MACRO_DEF_MEM_ALLCTR_INITIALIZER;
+const extern mem_allctr_t DEF_MEM_ALLCTR;
 
 typedef size_t (*increase_ptr_t) (size_t);
 
@@ -56,12 +51,7 @@ typedef struct
 	increase_ptr_t pincrease;
 } mem_mngr_t;
 
-const static mem_mngr_t
-DEF_MEM_MNGR =
-{
-	  .mem_allctr = MACRO_DEF_MEM_ALLCTR_INITIALIZER
-	, .pincrease  = &inc_x2_plus1
-};
+const extern mem_mngr_t DEF_MEM_MNGR;
 
 typedef struct
 {
@@ -70,11 +60,67 @@ typedef struct
 	size_t max_capacity;
 } stream_metha_t;
 
-typedef struct
+typedef struct struct_stream
 {
-	stream_metha_t metha;
-	mem_mngr_t     mem_mngr;
-	uint8_t       *mem_ptr;
-} stream_t;
+	stream_metha_t  metha;
+	mem_mngr_t      mem_mngr;
+	uint8_t        *mem_ptr;
+} *stream_ptr_t;
+
+mem_allctr_t
+create_mem_allctr(
+	  free_ptr_t    pfree
+	, malloc_ptr_t  pmalloc
+	, calloc_ptr_t  pcalloc
+	, realloc_ptr_t prealloc
+);
+
+mem_allctr_t
+create_mem_allctr_ex(
+	  free_ptr_t     pfree
+	, malloc_ptr_t   pmalloc
+	, calloc_ptr_t   pcalloc
+	, realloc_ptr_t  prealloc
+	, void          *nullptr_val
+);
+
+mem_mngr_t
+create_mem_mngr(
+	  mem_allctr_t   allctr
+	, increase_ptr_t pincrease
+);
+
+mem_mngr_t
+create_mem_mngr_ex(
+	  free_ptr_t     pfree
+	, malloc_ptr_t   pmalloc
+	, calloc_ptr_t   pcalloc
+	, realloc_ptr_t  prealloc
+	, void          *nullptr_val
+	, increase_ptr_t pincrease
+);
+
+FlwSt
+new_stream(
+	  stream_ptr_t *pstream
+	, mem_mngr_t mngr
+	, size_t max_capacity
+	, size_t init_capacity
+);
+
+FlwSt
+new_stream_ex(
+	  stream_ptr_t  *pstream
+	, free_ptr_t     pfree
+	, malloc_ptr_t   pmalloc
+	, calloc_ptr_t   pcalloc
+	, realloc_ptr_t  prealloc
+	, void          *nullptr_val
+	, increase_ptr_t pincrease
+	, size_t max_capacity
+	, size_t init_capacity
+);
+
+FlwSt delete_stream(stream_ptr_t *pstream);
 
 #endif // TO_STREAM_SERIALIZER_HEADER
