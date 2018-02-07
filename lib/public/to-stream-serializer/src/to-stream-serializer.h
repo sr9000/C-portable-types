@@ -15,6 +15,9 @@
 #include <stdlib.h>
 
 #include "flow-control.h"
+#include "integer-serialization.h"
+#include "floating-point-serialization.h"
+#include "blob-serialization.h"
 
 // check int8_t exists
 #ifndef INT8_MAX
@@ -122,5 +125,41 @@ new_stream_ex(
 );
 
 FlwSt delete_stream(stream_ptr_t *pstream);
+
+#ifdef INT8_SERIALIZATION_ALLOWED
+FlwSt stream_int8_t(stream_ptr_t stream, int8_t value);
+FlwSt stream_uint8_t(stream_ptr_t stream, uint8_t value);
+#endif // INT8_SERIALIZATION_ALLOWED
+
+#ifdef INT16_SERIALIZATION_ALLOWED
+FlwSt stream_int16_t(stream_ptr_t stream, int16_t value);
+FlwSt stream_uint16_t(stream_ptr_t stream, uint16_t value);
+#endif // INT16_SERIALIZATION_ALLOWED
+
+#ifdef INT32_SERIALIZATION_ALLOWED
+FlwSt stream_int32_t(stream_ptr_t stream, int32_t value);
+FlwSt stream_uint32_t(stream_ptr_t stream, uint32_t value);
+#endif // INT32_SERIALIZATION_ALLOWED
+
+#ifdef INT64_SERIALIZATION_ALLOWED
+FlwSt stream_int64_t(stream_ptr_t stream, int64_t value);
+FlwSt stream_uint64_t(stream_ptr_t stream, uint64_t value);
+#endif // INT32_SERIALIZATION_ALLOWED
+
+#ifdef FLOAT_SERIALIZATION_ALLOWED
+FlwSt stream_float(stream_ptr_t stream, float value);
+#endif // FLOAT_SERIALIZATION_ALLOWED
+
+#ifdef DOUBLE_SERIALIZATION_ALLOWED
+FlwSt stream_double(stream_ptr_t stream, double value);
+#endif // DOUBLE_SERIALIZATION_ALLOWED
+
+#ifdef BLOB_SERIALIZATION_ALLOWED
+FlwSt stream_blob(stream_ptr_t stream, void *data, uint32_t size);
+#endif // BLOB_SERIALIZATION_ALLOWED
+
+#ifdef BELOB_SERIALIZATION_ALLOWED
+FlwSt stream_belob(stream_ptr_t stream, void *data, uint64_t size);
+#endif // BELOB_SERIALIZATION_ALLOWED
 
 #endif // TO_STREAM_SERIALIZER_HEADER

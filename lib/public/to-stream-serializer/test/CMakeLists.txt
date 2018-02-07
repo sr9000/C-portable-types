@@ -14,7 +14,10 @@ add_subdirectory (../../../internal/sr-lib-flow-control/bin external-bins-002)
 include_directories (
 	../src
 	../../../internal/sr-lib-flow-control/src
-	../../../c-test-macroses/src)
+	../../../c-test-macroses/src
+	../../../internal/integer-serialization/src
+	../../../internal/floating-point-serialization/src
+	../../../internal/blob-serialization/src)
 
 # library paths
 link_directories (external-bins-001)
