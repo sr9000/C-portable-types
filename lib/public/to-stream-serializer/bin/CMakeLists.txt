@@ -1,46 +1,51 @@
 # CMake version
 cmake_minimum_required (VERSION 3.5)
 
-if (TARGET to-stream-serializer)
+macro(link_extern dir)
+	string(REGEX REPLACE "[\\\\/.]" "_" tmp ${dir})
+	add_subdirectory (${dir} ${tmp})
+	link_directories (${tmp})
+endmacro(link_extern)
+
+set (PRJ "to-stream-serializer")
+
+if (TARGET ${PRJ})
 	return ()
-endif (TARGET to-stream-serializer)
+endif (TARGET ${PRJ})
 
 # project name
-project (to-stream-serializer)
+project (${PRJ})
 
 set (CMAKE_C_STANDARD 11)
 
+# compute path to sources
+get_filename_component (sources ../src ABSOLUTE)
+
+# append include directories list
+list (APPEND include_direcroties_list ${sources})
+
 # dependency. put resulting binaries into local directory
-add_subdirectory (../../../internal/sr-lib-flow-control/bin external-bins-001)
-add_subdirectory (
-	../../../internal/integer-serialization/bin
-	external-bins-002)
-add_subdirectory (
-	../../../internal/floating-point-serialization/bin
-	external-bins-003)
-add_subdirectory (../../../internal/blob-serialization/bin external-bins-004)
+link_extern (../../../internal/sr-lib-flow-control/bin)
+link_extern (../../../internal/integer-serialization/bin)
+link_extern (../../../internal/floating-point-serialization/bin)
+link_extern (../../../internal/blob-serialization/bin)
 
 # *.h files directories
-include_directories (
-	../src
-	../../../internal/sr-lib-flow-control/src
-	../../../internal/integer-serialization/src
-	../../../internal/floating-point-serialization/src
-	../../../internal/blob-serialization/src)
-
-# library paths
-link_directories (external-bins-001)
-link_directories (external-bins-002)
-link_directories (external-bins-003)
-link_directories (external-bins-004)
+include_directories (${include_direcroties_list})
 
 # library name and sources
-add_library (to-stream-serializer STATIC ../src/to-stream-serializer.c)
+add_library (${PROJECT_NAME} STATIC ../src/${PROJECT_NAME}.c)
 
 # linked libraries
-target_link_libraries (
-	to-stream-serializer
-	sr-lib-flow-control
-	integer-serialization
-	floating-point-serialization
-	blob-serialization)
+# math library also needed
+target_link_libraries (${PROJECT_NAME} ${target_link_libraries_list})
+
+# append target link libraries lists with current lib
+list (APPEND target_link_libraries_list ${PROJECT_NAME})
+
+# save local scope to parent scope
+get_directory_property(has_parent PARENT_DIRECTORY)
+if (has_parent)
+	set(include_direcroties_list "${include_direcroties_list}" PARENT_SCOPE)
+	set(target_link_libraries_list "${target_link_libraries_list}" PARENT_SCOPE)
+endif ()
