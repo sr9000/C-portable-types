@@ -68,6 +68,7 @@ typedef struct struct_stream
 	stream_metha_t  metha;
 	mem_mngr_t      mem_mngr;
 	uint8_t        *mem_ptr;
+	uint8_t        *free_mem_ptr;
 } *stream_ptr_t;
 
 mem_allctr_t
