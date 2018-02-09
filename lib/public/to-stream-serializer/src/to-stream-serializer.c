@@ -296,7 +296,7 @@ request_stream_size(stream_ptr_t stream, size_t size)
 	(*stream).mem_ptr = (uint8_t*) new_mem_ptr;
 	(*stream).metha.available += new_capacity - (*stream).metha.capacity;
 	(*stream).metha.capacity = new_capacity;
-	(*stream).mem_ptr = get_current_stream_addres(stream);
+	(*stream).free_mem_ptr = get_current_stream_addres(stream);
 
 	return FLW_ST.succeeded;
 }
