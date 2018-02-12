@@ -248,6 +248,9 @@ new_stream_ex(
 
 FlwSt delete_stream(stream_ptr_t *pstream);
 
+size_t get_stream_size(stream_ptr_t *pstream);
+void*  get_stream_content_pointer(stream_ptr_t *pstream);
+
 #ifdef INT8_SERIALIZATION_ALLOWED
 FlwSt stream_int8_t(stream_ptr_t stream, int8_t value);
 FlwSt stream_uint8_t(stream_ptr_t stream, uint8_t value);
