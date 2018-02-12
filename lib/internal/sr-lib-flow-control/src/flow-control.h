@@ -27,17 +27,17 @@ struct struct_flow_state;
 
 typedef
 struct struct_flow_state
-	                FlwSt /// Alias for \ref struct_flow_state.
-	, *            pFlwSt /// Pointer onto \ref struct_flow_state.
-	, * restrict  rpFlwSt /// Restrict pointer onto \ref struct_flow_state.
+	                FlwSt //! Alias for \ref struct_flow_state.
+	, *            pFlwSt //! Pointer onto \ref struct_flow_state.
+	, * restrict  rpFlwSt //! Restrict pointer onto \ref struct_flow_state.
 	;
 
 
 typedef const
 struct struct_flow_state
-	               cFlwSt /// Constant variant of \ref FlwSt.
-	, *           pcFlwSt /// Constant variant of \ref pFlwSt.
-	, * restrict rpcFlwSt /// Constant variant of \ref rpFlwSt.
+	               cFlwSt //! Constant variant of \ref FlwSt.
+	, *           pcFlwSt //! Constant variant of \ref pFlwSt.
+	, * restrict rpcFlwSt //! Constant variant of \ref rpFlwSt.
 	;
 
 /**
@@ -50,27 +50,27 @@ struct struct_flow_state
 #else
 	int // or simple int type, if fastest type is not defined on that platform
 #endif
-	val; ///< Flow state.
+	val; //!< Flow state.
 };
 
 
 const static struct
 {
 	cFlwSt
-		  succeeded /// Constant field of \ref FLW_ST, that
-		            ///< indicates successful execution flow finishing.
-		            ///< @code{.c} FlwSt state = FLW_ST.succeeded; @endcode
-		            ///<
-		, failed    /// Constant field of \ref FLW_ST, that
-		            ///< indicates execution flow falling into an unimplemented
-		            ///< case because a logic error was detected.
-		            ///< @code{.c} FlwSt state = FLW_ST.failed; @endcode
-		            ///<
-		, crashed   /// Constant field of \ref FLW_ST, that indicates
-		            ///< an error with irreversible side effects
-		            ///< and memory leaks possibility.
-		            ///< @code{.c} FlwSt state = FLW_ST.crashed; @endcode
-		            ///<
+		  succeeded //! Constant field of \ref FLW_ST, that
+		            //!< indicates successful execution flow finishing.
+		            //!< @code{.c} FlwSt state = FLW_ST.succeeded; @endcode
+		            //!<
+		, failed    //! Constant field of \ref FLW_ST, that
+		            //!< indicates execution flow falling into an unimplemented
+		            //!< case because a logic error was detected.
+		            //!< @code{.c} FlwSt state = FLW_ST.failed; @endcode
+		            //!<
+		, crashed   //! Constant field of \ref FLW_ST, that indicates
+		            //!< an error with irreversible side effects
+		            //!< and memory leaks possibility.
+		            //!< @code{.c} FlwSt state = FLW_ST.crashed; @endcode
+		            //!<
 		;
 }
 /**
