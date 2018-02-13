@@ -109,14 +109,13 @@ create_mem_mngr_ex(
 	return r;
 }
 
-#define STREAM_NOT_NULL_ELSE_CRASHED(stream) \
+#define STREAM_NOT_NULL_ELSE_FAILED(stream) \
 if ((stream) == NULL) \
 { \
-	return FLW_ST.crashed; \
+	return FLW_ST.failed; \
 }
 
-uint8_t*
-get_current_stream_addres(stream_ptr_t stream)
+uint8_t* get_current_stream_addres(stream_ptr_t stream)
 {
 	return
 		  ((uint8_t*)((*stream).mem_ptr))
@@ -124,10 +123,9 @@ get_current_stream_addres(stream_ptr_t stream)
 		- (*stream).metha.available;
 }
 
-FlwSt
-check_stream_consistency(stream_ptr_t stream)
+FlwSt check_stream_consistency(stream_ptr_t stream)
 {
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	if (   (   (*stream).metha.max_capacity > 0
 	        && (*stream).metha.max_capacity < (*stream).metha.capacity)
 	    || (*stream).metha.available > (*stream).metha.capacity
@@ -240,9 +238,11 @@ FlwSt delete_stream(stream_ptr_t *pstream)
 }
 
 FlwSt
-request_stream_size(stream_ptr_t stream, size_t size)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+request_stream_size(
+	  stream_ptr_t stream
+	, size_t size
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	// check available space
 	if ((*stream).metha.available >= size)
 	{
@@ -332,18 +332,55 @@ request_stream_size(stream_ptr_t stream, size_t size)
 		((*(stream)).free_mem_ptr - old_free_mem_ptr); \
 }
 
+FlwSt
+get_stream_size(
+	  size_t *psize
+	, stream_ptr_t stream
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
+	STREAM_CONSISTENT_ELSE_CRASHED(stream);
+	if (psize == NULL)
+	{
+		return FLW_ST.failed;
+	}
+	(*psize) = (*stream).metha.capacity - (*stream).metha.available;
+	return FLW_ST.succeeded;
+}
+
+FlwSt
+get_stream_content_pointer(
+	  void** content_ptr
+	, stream_ptr_t stream
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
+	STREAM_CONSISTENT_ELSE_CRASHED(stream);
+	if (content_ptr == NULL)
+	{
+		return FLW_ST.failed;
+	}
+	(*content_ptr) = (*stream).mem_ptr;
+	return FLW_ST.succeeded;
+}
+
 #ifdef INT8_SERIALIZATION_ALLOWED
-FlwSt stream_int8_t(stream_ptr_t stream, int8_t value)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+FlwSt
+stream_int8_t(
+	  stream_ptr_t stream
+	, int8_t value
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	REQUEST_STREAM_SIZE_ELSE_RETURN(stream, 1);
 	SERIALIZE(stream, serialize_int8_t, value);
 	return FLW_ST.succeeded;
 }
-FlwSt stream_uint8_t(stream_ptr_t stream, uint8_t value)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+
+FlwSt
+stream_uint8_t(
+	  stream_ptr_t stream
+	, uint8_t value
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	REQUEST_STREAM_SIZE_ELSE_RETURN(stream, 1);
 	SERIALIZE(stream, serialize_uint8_t, value);
@@ -352,17 +389,24 @@ FlwSt stream_uint8_t(stream_ptr_t stream, uint8_t value)
 #endif // INT8_SERIALIZATION_ALLOWED
 
 #ifdef INT16_SERIALIZATION_ALLOWED
-FlwSt stream_int16_t(stream_ptr_t stream, int16_t value)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+FlwSt
+stream_int16_t(
+	  stream_ptr_t stream
+	, int16_t value
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	REQUEST_STREAM_SIZE_ELSE_RETURN(stream, 2);
 	SERIALIZE(stream, serialize_int16_t, value);
 	return FLW_ST.succeeded;
 }
-FlwSt stream_uint16_t(stream_ptr_t stream, uint16_t value)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+
+FlwSt
+stream_uint16_t(
+	  stream_ptr_t stream
+	, uint16_t value
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	REQUEST_STREAM_SIZE_ELSE_RETURN(stream, 2);
 	SERIALIZE(stream, serialize_uint16_t, value);
@@ -371,17 +415,24 @@ FlwSt stream_uint16_t(stream_ptr_t stream, uint16_t value)
 #endif // INT16_SERIALIZATION_ALLOWED
 
 #ifdef INT32_SERIALIZATION_ALLOWED
-FlwSt stream_int32_t(stream_ptr_t stream, int32_t value)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+FlwSt
+stream_int32_t(
+	  stream_ptr_t stream
+	, int32_t value
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	REQUEST_STREAM_SIZE_ELSE_RETURN(stream, 4);
 	SERIALIZE(stream, serialize_int32_t, value);
 	return FLW_ST.succeeded;
 }
-FlwSt stream_uint32_t(stream_ptr_t stream, uint32_t value)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+
+FlwSt
+stream_uint32_t(
+	  stream_ptr_t stream
+	, uint32_t value
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	REQUEST_STREAM_SIZE_ELSE_RETURN(stream, 4);
 	SERIALIZE(stream, serialize_uint32_t, value);
@@ -390,17 +441,24 @@ FlwSt stream_uint32_t(stream_ptr_t stream, uint32_t value)
 #endif // INT32_SERIALIZATION_ALLOWED
 
 #ifdef INT64_SERIALIZATION_ALLOWED
-FlwSt stream_int64_t(stream_ptr_t stream, int64_t value)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+FlwSt
+stream_int64_t(
+	  stream_ptr_t stream
+	, int64_t value
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	REQUEST_STREAM_SIZE_ELSE_RETURN(stream, 8);
 	SERIALIZE(stream, serialize_int64_t, value);
 	return FLW_ST.succeeded;
 }
-FlwSt stream_uint64_t(stream_ptr_t stream, uint64_t value)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+
+FlwSt
+stream_uint64_t(
+	  stream_ptr_t stream
+	, uint64_t value
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	REQUEST_STREAM_SIZE_ELSE_RETURN(stream, 8);
 	SERIALIZE(stream, serialize_uint64_t, value);
@@ -409,9 +467,12 @@ FlwSt stream_uint64_t(stream_ptr_t stream, uint64_t value)
 #endif // INT32_SERIALIZATION_ALLOWED
 
 #ifdef FLOAT_SERIALIZATION_ALLOWED
-FlwSt stream_float(stream_ptr_t stream, float value)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+FlwSt
+stream_float(
+	  stream_ptr_t stream
+	, float value
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	REQUEST_STREAM_SIZE_ELSE_RETURN(stream, SIZE_OF_SERIALIZED_FLOAT);
 	SERIALIZE(stream, serialize_float, value);
@@ -420,9 +481,12 @@ FlwSt stream_float(stream_ptr_t stream, float value)
 #endif // FLOAT_SERIALIZATION_ALLOWED
 
 #ifdef DOUBLE_SERIALIZATION_ALLOWED
-FlwSt stream_double(stream_ptr_t stream, double value)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+FlwSt
+stream_double(
+	  stream_ptr_t stream
+	, double value
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	REQUEST_STREAM_SIZE_ELSE_RETURN(stream, SIZE_OF_SERIALIZED_DOUBLE);
 	SERIALIZE(stream, serialize_double, value);
@@ -431,9 +495,13 @@ FlwSt stream_double(stream_ptr_t stream, double value)
 #endif // DOUBLE_SERIALIZATION_ALLOWED
 
 #ifdef BLOB_SERIALIZATION_ALLOWED
-FlwSt stream_blob(stream_ptr_t stream, void *data, uint32_t size)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+FlwSt
+stream_blob(
+	  stream_ptr_t stream
+	, void *data
+	, uint32_t size
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	size_t rsize = 4 + size;
 	if (rsize < size)
@@ -447,9 +515,13 @@ FlwSt stream_blob(stream_ptr_t stream, void *data, uint32_t size)
 #endif // BLOB_SERIALIZATION_ALLOWED
 
 #ifdef BELOB_SERIALIZATION_ALLOWED
-FlwSt stream_belob(stream_ptr_t stream, void *data, uint64_t size)
-{
-	STREAM_NOT_NULL_ELSE_CRASHED(stream);
+FlwSt
+stream_belob(
+	  stream_ptr_t stream
+	, void *data
+	, uint64_t size
+) {
+	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
 	size_t rsize = 8 + size;
 	if (rsize < size)
