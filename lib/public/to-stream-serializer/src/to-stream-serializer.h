@@ -59,7 +59,6 @@ typedef void * (*calloc_ptr_t) (size_t, size_t);
 typedef void * (*realloc_ptr_t) (void *, size_t);
 
 /*!
- * @typedef mem_allctr_t
  * @brief \em Memory \em allocator type.
  * @details \em Memory \em allocator type include all memory control function:
  * \c free, \c malloc, \c calloc and \c realloc. Also that type includes \em
@@ -96,28 +95,28 @@ typedef size_t (*increase_ptr_t) (size_t);
 
 /*!
  * @brief Increase stream capacity by 32.
- * @param [in] size Previous stream capacity value.
+ * @param [in] size  Previous stream capacity value.
  * @return Previous stream capacity value inscreased by 32.
  */
 size_t inc_plus32(size_t size);
 
 /*!
  * @brief Increase stream capacity by 4096.
- * @param [in] size Previous stream capacity value.
+ * @param [in] size  Previous stream capacity value.
  * @return Previous stream capacity value inscreased by 4096.
  */
 size_t inc_plus4k(size_t size);
 
 /*!
  * @brief Increase stream capacity by 16384.
- * @param [in] size Previous stream capacity value.
+ * @param [in] size  Previous stream capacity value.
  * @return Previous stream capacity value inscreased by 16384.
  */
 size_t inc_plus16k(size_t size);
 
 /*!
  * @brief Double stream capacity.
- * @param [in] size Previous stream capacity value.
+ * @param [in] size  Previous stream capacity value.
  * @details To avoid stuck on zero size that functions add 1 after multiplying
  * by 2.
  * @return Previous stream capacity value multiplied by 2.
@@ -126,7 +125,7 @@ size_t inc_x2_plus1(size_t size);
 
 /*!
  * @brief Add one tenth of current stream capacity.
- * @param [in] size Previous stream capacity value.
+ * @param [in] size  Previous stream capacity value.
  * @details To avoid stuck on low sizes that functions add 100 after
  * multiplying by 1.1 .
  * @return Previous stream capacity value increased by one tenth of stream
@@ -135,7 +134,6 @@ size_t inc_x2_plus1(size_t size);
 size_t inc_on_one10th(size_t size);
 
 /*!
- * @typedef mem_mngr_t
  * @brief \em Memory \em manager. It can allocates and frees memory, assings
  * new stream size.
  * @details Functionally equivalent to \ref mem_allctr_t except possibility of
@@ -157,27 +155,52 @@ typedef struct
  */
 const extern mem_mngr_t DEF_MEM_MNGR;
 
+/*!
+ * @brief Values with information about stream capacity and other related
+ * values.
+ * @details That type aggregates all values that describes all stream
+ * dimentions, like capacity, total avaiilable size and maximum size of stream.
+ */
 typedef struct
 {
+	//! Current allocated memory for stream
 	size_t capacity;
+
+	//! Size of memory, available to write data without reallocating
 	size_t available;
+
+	//! Maximum size of memory, that can be allocated for a stream
 	size_t max_capacity;
 } stream_metha_t;
 
-typedef struct struct_stream
+/*!
+ * @brief Pointer onto stream structure.
+ * @details There are no typedef for raw stream value, because all work with
+ * that object strongly incapsulated in provided functions in that library.
+ * Internal structure of that object is not your business.
+ *
+ * Stream object and functions, that manages it, provide autoscalable buffer
+ * to store serialized primitive values.
+ */
+typedef struct
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
+struct_stream
+#endif // not DOXYGEN_SHOULD_SKIP_THIS
 {
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 	stream_metha_t  metha;
 	mem_mngr_t      mem_mngr;
 	uint8_t        *mem_ptr;
 	uint8_t        *free_mem_ptr;
+#endif // not DOXYGEN_SHOULD_SKIP_THIS
 } *stream_ptr_t;
 
 /*!
  * @brief Function to create custom \em memory \em allocators.
- * @param [in] pfree    Pointer onto \c free function.
- * @param [in] pmalloc  Pointer onto \c malloc function.
- * @param [in] pcalloc  Pointer onto \c calloc function.
- * @param [in] prealloc Pointer onto \c realloc function.
+ * @param [in] pfree     Pointer onto \c free function.
+ * @param [in] pmalloc   Pointer onto \c malloc function.
+ * @param [in] pcalloc   Pointer onto \c calloc function.
+ * @param [in] prealloc  Pointer onto \c realloc function.
  * @return Filled \ref mem_allctr_t value with pointed functions as memory
  * control functions and \c NULL as \em null \em pointer special value.
  */
@@ -192,11 +215,11 @@ create_mem_allctr(
 /*!
  * @brief Function to create custom \em memory \em allocators with nonstandard
  * \em null \em pointer special value.
- * @param [in] pfree       Pointer onto \c free function.
- * @param [in] pmalloc     Pointer onto \c malloc function.
- * @param [in] pcalloc     Pointer onto \c calloc function.
- * @param [in] prealloc    Pointer onto \c realloc function.
- * @param [in] nullptr_val \em Null \em pointer special value
+ * @param [in] pfree        Pointer onto \c free function.
+ * @param [in] pmalloc      Pointer onto \c malloc function.
+ * @param [in] pcalloc      Pointer onto \c calloc function.
+ * @param [in] prealloc     Pointer onto \c realloc function.
+ * @param [in] nullptr_val  \em Null \em pointer special value
  * @return Filled \ref mem_allctr_t value with pointed functions as memory
  * control functions and \p nullptr_val as \em null \em pointer special value.
  */
@@ -209,12 +232,31 @@ create_mem_allctr_ex(
 	, void          *nullptr_val
 );
 
+/*!
+ * @brief Function to create custom \em memory \em manager with nonstandard
+ * \em size \em increase function.
+ * @param [in] allctr     \em Memory \em allocator object.
+ * @param [in] pincrease  Pointer onto \em size \em increase function.
+ * @return Filled \ref mem_mngr_t value with pointed function as \em size \em
+ * increase function and \p allctr as \em memory \em allocator.
+ */
 mem_mngr_t
 create_mem_mngr(
 	  mem_allctr_t   allctr
 	, increase_ptr_t pincrease
 );
 
+/*!
+ * @brief Function to create custom \em memory \em manager with nonstandard
+ * components.
+ * @param [in] pfree        Pointer onto \c free function.
+ * @param [in] pmalloc      Pointer onto \c malloc function.
+ * @param [in] pcalloc      Pointer onto \c calloc function.
+ * @param [in] prealloc     Pointer onto \c realloc function.
+ * @param [in] nullptr_val  \em Null \em pointer special value.
+ * @param [in] pincrease Pointer onto \em size \em increase function.
+ * @return Filled \ref mem_mngr_t value with provided components.
+ */
 mem_mngr_t
 create_mem_mngr_ex(
 	  free_ptr_t     pfree
@@ -225,6 +267,16 @@ create_mem_mngr_ex(
 	, increase_ptr_t pincrease
 );
 
+/*!
+ * @brief Create stream structure. You should always using \ref delete_stream
+ * function when you have done all work with created stream.
+ * @param [out] pstream      Pointer onto \ref stream_ptr_t.
+ * @param [in] mngr          \em Memory \em manager.
+ * @param [in] max_capacity  Maximum capacity of created stream. Use 0 value
+ * when you want a stream without upper bound for capacity.
+ * @param [in] init_capacity Initial stream capacity.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt
 new_stream(
 	  stream_ptr_t *pstream
@@ -233,6 +285,21 @@ new_stream(
 	, size_t init_capacity
 );
 
+/*!
+ * @brief Create stream structure. You should always using \ref delete_stream
+ * function when you have done all work with created stream.
+ * @param [out] pstream      Pointer onto \ref stream_ptr_t.
+ * @param [in] pfree         Pointer onto \c free function.
+ * @param [in] pmalloc       Pointer onto \c malloc function.
+ * @param [in] pcalloc       Pointer onto \c calloc function.
+ * @param [in] prealloc      Pointer onto \c realloc function.
+ * @param [in] nullptr_val   \em Null \em pointer special value.
+ * @param [in] pincrease     Pointer onto \em size \em increase function.
+ * @param [in] max_capacity  Maximum capacity of created stream. Use 0 value
+ * when you want a stream without upper bound for capacity.
+ * @param [in] init_capacity Initial stream capacity.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt
 new_stream_ex(
 	  stream_ptr_t  *pstream
@@ -246,44 +313,147 @@ new_stream_ex(
 	, size_t init_capacity
 );
 
+/*!
+ * @brief Destroy stream object.
+ * @param  pstream  Pointer onto valid \ref stream_ptr_t.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt delete_stream(stream_ptr_t *pstream);
 
+/*!
+ * @brief Provides method to know size of all serialized values.
+ * @param  [out] psize  Pointer onto size_t variable to assign actual stream
+ * size. Actual stream size is size of all serialized value. Actual stream size
+ * didn't equal to stream capacity.
+ * @param  [in] stream  Valid stream.
+ * @return Status of operation (succeeded, failed, crashed). Variable with
+ * address \p psize stores actual stream size on moment of calling \ref
+ * get_stream_size.
+ */
 FlwSt get_stream_size(size_t *psize, stream_ptr_t stream);
+
+/*!
+ * @brief Provides method to get pointer onto serialized values.
+ * @param  [out] content_ptr  Pointer to store pointer on memory.
+ * @param  [in] stream  Valid stream.
+ * @return Status of operation (succeeded, failed, crashed). Pointer with
+ * address \p content_ptr stores real address onto memory with serialized
+ * values. That is actual memory address, not copy. Be careful and don't write
+ * any values by that address.
+ */
 FlwSt get_stream_content_pointer(void** content_ptr, stream_ptr_t stream);
 
 #ifdef INT8_SERIALIZATION_ALLOWED
+/*!
+ * @brief Serialize int8_t.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] value  Value.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_int8_t(stream_ptr_t stream, int8_t value);
+
+/*!
+ * @brief Serialize uint8_t.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] value  Value.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_uint8_t(stream_ptr_t stream, uint8_t value);
 #endif // INT8_SERIALIZATION_ALLOWED
 
 #ifdef INT16_SERIALIZATION_ALLOWED
+/*!
+ * @brief Serialize int16_t.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] value  Value.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_int16_t(stream_ptr_t stream, int16_t value);
+
+/*!
+ * @brief Serialize uint16_t.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] value  Value.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_uint16_t(stream_ptr_t stream, uint16_t value);
 #endif // INT16_SERIALIZATION_ALLOWED
 
 #ifdef INT32_SERIALIZATION_ALLOWED
+/*!
+ * @brief Serialize int32_t.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] value  Value.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_int32_t(stream_ptr_t stream, int32_t value);
+
+/*!
+ * @brief Serialize uint32_t.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] value  Value.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_uint32_t(stream_ptr_t stream, uint32_t value);
 #endif // INT32_SERIALIZATION_ALLOWED
 
 #ifdef INT64_SERIALIZATION_ALLOWED
+/*!
+ * @brief Serialize int64_t.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] value  Value.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_int64_t(stream_ptr_t stream, int64_t value);
+
+/*!
+ * @brief Serialize uint64_t.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] value  Value.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_uint64_t(stream_ptr_t stream, uint64_t value);
 #endif // INT32_SERIALIZATION_ALLOWED
 
 #ifdef FLOAT_SERIALIZATION_ALLOWED
+/*!
+ * @brief Serialize float.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] value  Value.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_float(stream_ptr_t stream, float value);
 #endif // FLOAT_SERIALIZATION_ALLOWED
 
 #ifdef DOUBLE_SERIALIZATION_ALLOWED
+/*!
+ * @brief Serialize double.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] value  Value.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_double(stream_ptr_t stream, double value);
 #endif // DOUBLE_SERIALIZATION_ALLOWED
 
 #ifdef BLOB_SERIALIZATION_ALLOWED
+/*!
+ * @brief Serialize blob.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] data  Pointer onto blob.
+ * @param  [in] size  Size of blob in bytes.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_blob(stream_ptr_t stream, void *data, uint32_t size);
 #endif // BLOB_SERIALIZATION_ALLOWED
 
 #ifdef BELOB_SERIALIZATION_ALLOWED
+/*!
+ * @brief Serialize belob.
+ * @param  [out] stream  Valid stream.
+ * @param  [in] data  Pointer onto belob.
+ * @param  [in] size  Size of belob in bytes.
+ * @return Status of operation (succeeded, failed, crashed).
+ */
 FlwSt stream_belob(stream_ptr_t stream, void *data, uint64_t size);
 #endif // BELOB_SERIALIZATION_ALLOWED
 

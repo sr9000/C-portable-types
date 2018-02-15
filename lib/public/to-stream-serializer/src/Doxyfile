@@ -2040,7 +2040,12 @@ INCLUDE_FILE_PATTERNS  =
 PREDEFINED             = INT8_SERIALIZATION_ALLOWED \
                          INT16_SERIALIZATION_ALLOWED \
                          INT32_SERIALIZATION_ALLOWED \
-                         INT64_SERIALIZATION_ALLOWED
+                         INT64_SERIALIZATION_ALLOWED \
+                         FLOAT_SERIALIZATION_ALLOWED \
+                         DOUBLE_SERIALIZATION_ALLOWED \
+                         BLOB_SERIALIZATION_ALLOWED \
+                         BELOB_SERIALIZATION_ALLOWED \
+                         DOXYGEN_SHOULD_SKIP_THIS
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then this
 # tag can be used to specify a list of macro names that should be expanded. The
