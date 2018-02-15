@@ -38,7 +38,7 @@ size_t inc_x2_plus1(size_t size)
 	return 2 * size + 1;
 }
 
-size_t inc_on_one10th(size_t size);
+size_t inc_on_one10th(size_t size)
 {
 	return size + (size / 10) + 100;
 }
