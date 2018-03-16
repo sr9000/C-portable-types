@@ -46,3 +46,11 @@ CTestTestfile.cmake
 *.kdev4
 
 \.directory
+
+*.xml
+
+*.cbp
+
+*.iml
+
+\.idea

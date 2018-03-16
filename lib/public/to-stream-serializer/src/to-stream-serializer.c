@@ -1,4 +1,5 @@
 #include "to-stream-serializer.h"
+#include "internal-definitions/to-stream-serializer.h"
 
 #define MACRO_DEF_MEM_ALLCTR_INITIALIZER \
 { \
@@ -126,9 +127,9 @@ uint8_t* get_current_stream_addres(stream_ptr_t stream)
 FlwSt check_stream_consistency(stream_ptr_t stream)
 {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
-	if (   (   (*stream).metha.max_capacity > 0
+	if (   (*stream).metha.available > (*stream).metha.capacity
+	    || (   (*stream).metha.max_capacity > 0
 	        && (*stream).metha.max_capacity < (*stream).metha.capacity)
-	    || (*stream).metha.available > (*stream).metha.capacity
 	) {
 		return FLW_ST.crashed;
 	}
@@ -167,14 +168,21 @@ new_stream(
 	}
 
 	(**pstream).mem_mngr = mngr;
-	(**pstream).mem_ptr =
-		(uint8_t*)
-		((*(mngr.mem_allctr.pmalloc))(init_capacity * sizeof(uint8_t)));
-
-	if ((**pstream).mem_ptr == (**pstream).mem_mngr.mem_allctr.nullptr_val)
+	if (init_capacity == 0)
 	{
-		free(*pstream);
-		return FLW_ST.failed;
+		(**pstream).mem_ptr = (**pstream).mem_mngr.mem_allctr.nullptr_val;
+	}
+	else
+	{
+		(**pstream).mem_ptr =
+			(uint8_t*)
+			((*(mngr.mem_allctr.pmalloc))(init_capacity * sizeof(uint8_t)));
+
+		if ((**pstream).mem_ptr == (**pstream).mem_mngr.mem_allctr.nullptr_val)
+		{
+			free(*pstream);
+			return FLW_ST.failed;
+		}
 	}
 
 	(**pstream).metha.max_capacity = max_capacity;
