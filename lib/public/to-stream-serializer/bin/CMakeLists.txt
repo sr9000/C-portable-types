@@ -7,7 +7,7 @@ macro(link_extern dir)
 	link_directories (${tmp})
 endmacro(link_extern)
 
-set (PRJ "integer-serialization")
+set (PRJ "to-stream-serializer")
 
 if (TARGET ${PRJ})
 	return ()
@@ -24,13 +24,23 @@ get_filename_component (sources ../src ABSOLUTE)
 # append include directories list
 list (APPEND include_direcroties_list ${sources})
 
+# dependency. put resulting binaries into local directory
+link_extern (../../../internal/sr-lib-flow-control/bin)
+link_extern (../../../internal/integer-serialization/bin)
+link_extern (../../../internal/floating-point-serialization/bin)
+link_extern (../../../internal/blob-serialization/bin)
+
 # *.h files directories
 include_directories (${include_direcroties_list})
 
 # library name and sources
 add_library (${PROJECT_NAME} STATIC ../src/${PROJECT_NAME}.c)
 
-# append extern binaries and target link libraries lists simultaneously
+# linked libraries
+# math library also needed
+target_link_libraries (${PROJECT_NAME} ${target_link_libraries_list})
+
+# append target link libraries lists with current lib
 list (APPEND target_link_libraries_list ${PROJECT_NAME})
 
 # save local scope to parent scope

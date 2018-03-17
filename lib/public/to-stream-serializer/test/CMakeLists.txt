@@ -7,7 +7,7 @@ macro(link_extern dir)
 	link_directories (${tmp})
 endmacro(link_extern)
 
-set (PRJ "floating-point-serialization-test")
+set (PRJ "to-stream-serializer-test")
 
 if (TARGET ${PRJ})
 	return ()
@@ -20,8 +20,7 @@ set (CMAKE_C_STANDARD 11)
 
 # dependency. put resulting binaries into local directory
 link_extern (../bin)
-link_extern (../../sr-lib-flow-control/bin)
-link_extern (../../integer-serialization/bin)
+link_extern (../../../internal/sr-lib-flow-control/bin)
 
 # *.h files directories
 include_directories (
