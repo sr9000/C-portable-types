@@ -1,7 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <to-stream-serializer.h>
-#include <a.out.h>
 
 #include "test.h"
 #include "to-stream-serializer.h"
@@ -936,7 +934,7 @@ TEST_FINISHED
 NEW_TEST(to_stream_serialize_int64)
 	stream_ptr_t stream;
 	FlwSt st;
-	int64_t val = -9777777777777777777;
+	int64_t val = -977777777777777777L;
 
 	size_t max_capacity  = 128;
 	size_t init_capacity = max_capacity / 2;
@@ -1004,7 +1002,7 @@ TEST_FINISHED
 NEW_TEST(to_stream_serialize_uint64)
 	stream_ptr_t stream;
 	FlwSt st;
-	uint64_t val = 9777777777777777777;
+	uint64_t val = 977777777777777777L;
 
 	size_t max_capacity  = 128;
 	size_t init_capacity = max_capacity / 2;
@@ -1070,6 +1068,148 @@ NEW_TEST(to_stream_serialize_uint64)
 TEST_FINISHED
 #endif // INT64_SERIALIZATION_ALLOWED
 
+#ifdef FLOAT_SERIALIZATION_ALLOWED
+#include <math.h>
+NEW_TEST(to_stream_serialize_float)
+	stream_ptr_t stream;
+	FlwSt st;
+	float val = -9.7777f;
+
+	size_t iterations    = 64;
+	size_t max_capacity  = 2 * iterations * SIZE_OF_SERIALIZED_FLOAT;
+	size_t init_capacity = max_capacity / 2;
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_float(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_float(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_float(stream, val);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	uint8_t *p = ((*stream).mem_ptr);
+	float dval;
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_float(&dval, p);
+		if (0.0001f < (fabsf(dval - val) / fabsf(val)))
+		{
+			TEST_FAILURE;
+		}
+		p += SIZE_OF_SERIALIZED_FLOAT;
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+#endif // FLOAT_SERIALIZATION_ALLOWED
+
+#ifdef DOUBLE_SERIALIZATION_ALLOWED
+#include <math.h>
+NEW_TEST(to_stream_serialize_double)
+	stream_ptr_t stream;
+	FlwSt st;
+	double val = -9.777777777777;
+
+	size_t iterations    = 64;
+	size_t max_capacity  = 2 * iterations * SIZE_OF_SERIALIZED_DOUBLE;
+	size_t init_capacity = max_capacity / 2;
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_double(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	       || (*stream).metha.available != 0
+		) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_double(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	       || (*stream).metha.available != 0
+		) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_double(stream, val);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	uint8_t *p = ((*stream).mem_ptr);
+	double dval;
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_double(&dval, p);
+		if (0.0000000000001 < (fabs(dval - val) / fabs(val)))
+		{
+			TEST_FAILURE;
+		}
+		p += SIZE_OF_SERIALIZED_DOUBLE;
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+#endif // DOUBLE_SERIALIZATION_ALLOWED
+
 INIT_TESTS_CHECKS
 	CHECK_TEST(TEST_CHECK_UP, constants_check);
 	CHECK_TEST(TEST_CHECK_UP, increase_functions_check);
@@ -1091,4 +1231,10 @@ INIT_TESTS_CHECKS
 	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_int64);
 	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_uint64);
 #endif // INT64_SERIALIZATION_ALLOWED
+#ifdef FLOAT_SERIALIZATION_ALLOWED
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_float);
+#endif // FLOAT_SERIALIZATION_ALLOWED
+#ifdef DOUBLE_SERIALIZATION_ALLOWED
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_double);
+#endif // DOUBLE_SERIALIZATION_ALLOWED
 DONE_TESTS_CHECKS
