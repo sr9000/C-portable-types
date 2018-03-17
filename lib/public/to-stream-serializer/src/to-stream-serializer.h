@@ -322,10 +322,10 @@ FlwSt delete_stream(stream_ptr_t *pstream);
 
 /*!
  * @brief Provides method to know size of all serialized values.
- * @param  [out] psize  Pointer onto size_t variable to assign actual stream
+ * @param  [out] psize   Pointer onto size_t variable to assign actual stream
  * size. Actual stream size is size of all serialized value. Actual stream size
  * didn't equal to stream capacity.
- * @param  [in] stream  Valid stream.
+ * @param  [in]  stream  Valid stream.
  * @return Status of operation (succeeded, failed, crashed). Variable with
  * address \p psize stores actual stream size on moment of calling \ref
  * get_stream_size.
@@ -335,7 +335,7 @@ FlwSt get_stream_size(size_t *psize, stream_ptr_t stream);
 /*!
  * @brief Provides method to get pointer onto serialized values.
  * @param  [out] content_ptr  Pointer to store pointer on memory.
- * @param  [in] stream  Valid stream.
+ * @param  [in]  stream       Valid stream.
  * @return Status of operation (succeeded, failed, crashed). Pointer with
  * address \p content_ptr stores real address onto memory with serialized
  * values. That is actual memory address, not copy. Be careful and don't write
@@ -347,7 +347,7 @@ FlwSt get_stream_content_pointer(void** content_ptr, stream_ptr_t stream);
 /*!
  * @brief Serialize int8_t.
  * @param  [out] stream  Valid stream.
- * @param  [in] value  Value.
+ * @param  [in]  value   Value.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_int8_t(stream_ptr_t stream, int8_t value);
@@ -355,7 +355,7 @@ FlwSt stream_int8_t(stream_ptr_t stream, int8_t value);
 /*!
  * @brief Serialize uint8_t.
  * @param  [out] stream  Valid stream.
- * @param  [in] value  Value.
+ * @param  [in]  value   Value.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_uint8_t(stream_ptr_t stream, uint8_t value);
@@ -365,7 +365,7 @@ FlwSt stream_uint8_t(stream_ptr_t stream, uint8_t value);
 /*!
  * @brief Serialize int16_t.
  * @param  [out] stream  Valid stream.
- * @param  [in] value  Value.
+ * @param  [in]  value   Value.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_int16_t(stream_ptr_t stream, int16_t value);
@@ -373,7 +373,7 @@ FlwSt stream_int16_t(stream_ptr_t stream, int16_t value);
 /*!
  * @brief Serialize uint16_t.
  * @param  [out] stream  Valid stream.
- * @param  [in] value  Value.
+ * @param  [in]  value   Value.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_uint16_t(stream_ptr_t stream, uint16_t value);
@@ -383,7 +383,7 @@ FlwSt stream_uint16_t(stream_ptr_t stream, uint16_t value);
 /*!
  * @brief Serialize int32_t.
  * @param  [out] stream  Valid stream.
- * @param  [in] value  Value.
+ * @param  [in]  value   Value.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_int32_t(stream_ptr_t stream, int32_t value);
@@ -391,7 +391,7 @@ FlwSt stream_int32_t(stream_ptr_t stream, int32_t value);
 /*!
  * @brief Serialize uint32_t.
  * @param  [out] stream  Valid stream.
- * @param  [in] value  Value.
+ * @param  [in]  value   Value.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_uint32_t(stream_ptr_t stream, uint32_t value);
@@ -401,7 +401,7 @@ FlwSt stream_uint32_t(stream_ptr_t stream, uint32_t value);
 /*!
  * @brief Serialize int64_t.
  * @param  [out] stream  Valid stream.
- * @param  [in] value  Value.
+ * @param  [in]  value   Value.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_int64_t(stream_ptr_t stream, int64_t value);
@@ -409,7 +409,7 @@ FlwSt stream_int64_t(stream_ptr_t stream, int64_t value);
 /*!
  * @brief Serialize uint64_t.
  * @param  [out] stream  Valid stream.
- * @param  [in] value  Value.
+ * @param  [in]  value   Value.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_uint64_t(stream_ptr_t stream, uint64_t value);
@@ -419,7 +419,7 @@ FlwSt stream_uint64_t(stream_ptr_t stream, uint64_t value);
 /*!
  * @brief Serialize float.
  * @param  [out] stream  Valid stream.
- * @param  [in] value  Value.
+ * @param  [in]  value   Value.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_float(stream_ptr_t stream, float value);
@@ -429,7 +429,7 @@ FlwSt stream_float(stream_ptr_t stream, float value);
 /*!
  * @brief Serialize double.
  * @param  [out] stream  Valid stream.
- * @param  [in] value  Value.
+ * @param  [in]  value   Value.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_double(stream_ptr_t stream, double value);
@@ -439,8 +439,8 @@ FlwSt stream_double(stream_ptr_t stream, double value);
 /*!
  * @brief Serialize blob.
  * @param  [out] stream  Valid stream.
- * @param  [in] data  Pointer onto blob.
- * @param  [in] size  Size of blob in bytes.
+ * @param  [in]  data    Pointer onto blob.
+ * @param  [in]  size    Size of blob in bytes.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_blob(stream_ptr_t stream, void *data, uint32_t size);
@@ -450,8 +450,8 @@ FlwSt stream_blob(stream_ptr_t stream, void *data, uint32_t size);
 /*!
  * @brief Serialize belob.
  * @param  [out] stream  Valid stream.
- * @param  [in] data  Pointer onto belob.
- * @param  [in] size  Size of belob in bytes.
+ * @param  [in]  data    Pointer onto belob.
+ * @param  [in]  size    Size of belob in bytes.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt stream_belob(stream_ptr_t stream, void *data, uint64_t size);

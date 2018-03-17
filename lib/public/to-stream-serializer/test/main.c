@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <to-stream-serializer.h>
+#include <a.out.h>
 
 #include "test.h"
 #include "to-stream-serializer.h"
@@ -519,6 +520,556 @@ NEW_TEST(stream_request_size_with_real_memory)
 	free(real_stream.mem_ptr);
 TEST_FINISHED
 
+NEW_TEST(to_stream_serialize_int8)
+	stream_ptr_t stream;
+	FlwSt st;
+	int8_t val = -97;
+
+	size_t max_capacity  = 128;
+	size_t init_capacity = max_capacity / 2;
+	size_t iterations    = init_capacity / sizeof(int8_t);
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_int8_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_int8_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_int8_t(stream, val);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	int8_t *p = (int8_t *) ((*stream).mem_ptr);
+	int8_t dval;
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_int8_t(&dval, p);
+		if (dval != val)
+		{
+			TEST_FAILURE;
+		}
+		p++;
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+
+NEW_TEST(to_stream_serialize_uint8)
+	stream_ptr_t stream;
+	FlwSt st;
+	uint8_t val = 97;
+
+	size_t max_capacity  = 128;
+	size_t init_capacity = max_capacity / 2;
+	size_t iterations    = init_capacity / sizeof(uint8_t);
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_uint8_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_uint8_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_uint8_t(stream, val);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	uint8_t *p = (uint8_t *) ((*stream).mem_ptr);
+	uint8_t dval;
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_uint8_t(&dval, p);
+		if (dval != val)
+		{
+			TEST_FAILURE;
+		}
+		p++;
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+
+#ifdef INT16_SERIALIZATION_ALLOWED
+NEW_TEST(to_stream_serialize_int16)
+	stream_ptr_t stream;
+	FlwSt st;
+	int16_t val = -9777;
+
+	size_t max_capacity  = 128;
+	size_t init_capacity = max_capacity / 2;
+	size_t iterations    = init_capacity / sizeof(int16_t);
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_int16_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_int16_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_int16_t(stream, val);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	int16_t *p = (int16_t *) ((*stream).mem_ptr);
+	int16_t dval;
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_int16_t(&dval, p);
+		if (dval != val)
+		{
+			TEST_FAILURE;
+		}
+		p++;
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+
+NEW_TEST(to_stream_serialize_uint16)
+	stream_ptr_t stream;
+	FlwSt st;
+	uint16_t val = 9777;
+
+	size_t max_capacity  = 128;
+	size_t init_capacity = max_capacity / 2;
+	size_t iterations    = init_capacity / sizeof(uint16_t);
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_uint16_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_uint16_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_uint16_t(stream, val);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	uint16_t *p = (uint16_t *) ((*stream).mem_ptr);
+	uint16_t dval;
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_uint16_t(&dval, p);
+		if (dval != val)
+		{
+			TEST_FAILURE;
+		}
+		p++;
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+#endif // INT16_SERIALIZATION_ALLOWED
+
+#ifdef INT32_SERIALIZATION_ALLOWED
+NEW_TEST(to_stream_serialize_int32)
+	stream_ptr_t stream;
+	FlwSt st;
+	int32_t val = -977777777;
+
+	size_t max_capacity  = 128;
+	size_t init_capacity = max_capacity / 2;
+	size_t iterations    = init_capacity / sizeof(int32_t);
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_int32_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_int32_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_int32_t(stream, val);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	int32_t *p = (int32_t *) ((*stream).mem_ptr);
+	int32_t dval;
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_int32_t(&dval, p);
+		if (dval != val)
+		{
+			TEST_FAILURE;
+		}
+		p++;
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+
+NEW_TEST(to_stream_serialize_uint32)
+	stream_ptr_t stream;
+	FlwSt st;
+	uint32_t val = 977777777;
+
+	size_t max_capacity  = 128;
+	size_t init_capacity = max_capacity / 2;
+	size_t iterations    = init_capacity / sizeof(uint32_t);
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_uint32_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_uint32_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_uint32_t(stream, val);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	uint32_t *p = (uint32_t *) ((*stream).mem_ptr);
+	uint32_t dval;
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_uint32_t(&dval, p);
+		if (dval != val)
+		{
+			TEST_FAILURE;
+		}
+		p++;
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+#endif // INT32_SERIALIZATION_ALLOWED
+
+#ifdef INT64_SERIALIZATION_ALLOWED
+NEW_TEST(to_stream_serialize_int64)
+	stream_ptr_t stream;
+	FlwSt st;
+	int64_t val = -9777777777777777777;
+
+	size_t max_capacity  = 128;
+	size_t init_capacity = max_capacity / 2;
+	size_t iterations    = init_capacity / sizeof(int64_t);
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_int64_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	       || (*stream).metha.available != 0
+		) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_int64_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	       || (*stream).metha.available != 0
+		) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_int64_t(stream, val);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	int64_t *p = (int64_t *) ((*stream).mem_ptr);
+	int64_t dval;
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_int64_t(&dval, p);
+		if (dval != val)
+		{
+			TEST_FAILURE;
+		}
+		p++;
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+
+NEW_TEST(to_stream_serialize_uint64)
+	stream_ptr_t stream;
+	FlwSt st;
+	uint64_t val = 9777777777777777777;
+
+	size_t max_capacity  = 128;
+	size_t init_capacity = max_capacity / 2;
+	size_t iterations    = init_capacity / sizeof(uint64_t);
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_uint64_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_uint64_t(stream, val);
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_uint64_t(stream, val);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	uint64_t *p = (uint64_t *) ((*stream).mem_ptr);
+	uint64_t dval;
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_uint64_t(&dval, p);
+		if (dval != val)
+		{
+			TEST_FAILURE;
+		}
+		p++;
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+#endif // INT64_SERIALIZATION_ALLOWED
+
 INIT_TESTS_CHECKS
 	CHECK_TEST(TEST_CHECK_UP, constants_check);
 	CHECK_TEST(TEST_CHECK_UP, increase_functions_check);
@@ -526,6 +1077,18 @@ INIT_TESTS_CHECKS
 	CHECK_TEST(TEST_CHECK_UP, stream_consistency_check);
 	CHECK_TEST(TEST_CHECK_UP, stream_request_size);
 	CHECK_TEST(TEST_CHECK_UP, stream_request_size_with_real_memory);
-#ifdef BELOB_SERIALIZATION_ALLOWED
-#endif // BELOB_SERIALIZATION_ALLOWED
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_int8);
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_uint8);
+#ifdef INT16_SERIALIZATION_ALLOWED
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_int16);
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_uint16);
+#endif // INT16_SERIALIZATION_ALLOWED
+#ifdef INT32_SERIALIZATION_ALLOWED
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_int32);
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_uint32);
+#endif // INT32_SERIALIZATION_ALLOWED
+#ifdef INT64_SERIALIZATION_ALLOWED
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_int64);
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_uint64);
+#endif // INT64_SERIALIZATION_ALLOWED
 DONE_TESTS_CHECKS
