@@ -1311,8 +1311,8 @@ NEW_TEST(to_stream_serialize_belob)
 		}
 	}
 	if (   (*stream).metha.capacity  != init_capacity
-	       || (*stream).metha.available != 0
-		) {
+	    || (*stream).metha.available != 0
+	) {
 		TEST_FAILURE;
 	}
 	// write until max capacity
@@ -1325,8 +1325,8 @@ NEW_TEST(to_stream_serialize_belob)
 		}
 	}
 	if (   (*stream).metha.capacity  != max_capacity
-	       || (*stream).metha.available != 0
-		) {
+	    || (*stream).metha.available != 0
+	) {
 		TEST_FAILURE;
 	}
 	// no more space
