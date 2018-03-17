@@ -1124,7 +1124,7 @@ NEW_TEST(to_stream_serialize_float)
 	for (int i = 0; i < 2 * iterations; ++i)
 	{
 		deserialize_float(&dval, p);
-		if (0.0001f < (fabsf(dval - val) / fabsf(val)))
+		if (0.00001f < (fabsf(dval - val) / fabsf(val)))
 		{
 			TEST_FAILURE;
 		}
@@ -1210,6 +1210,152 @@ NEW_TEST(to_stream_serialize_double)
 TEST_FINISHED
 #endif // DOUBLE_SERIALIZATION_ALLOWED
 
+#ifdef BLOB_SERIALIZATION_ALLOWED
+#include <string.h>
+NEW_TEST(to_stream_serialize_blob)
+	stream_ptr_t stream;
+	FlwSt st;
+	char val[] =
+		"Interesting long value 1234567890 "
+		"+_)(*&^%$#@!~=-`[];',./{}:\"<>?\\|";
+
+	size_t iterations    = 64;
+	size_t max_capacity  = 2 * iterations * (4 + sizeof(val));
+	size_t init_capacity = max_capacity / 2;
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_blob(stream, val, sizeof(val));
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_blob(stream, val, sizeof(val));
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	    || (*stream).metha.available != 0
+	) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_blob(stream, val, sizeof(val));
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	uint8_t *p = ((*stream).mem_ptr);
+	char dval[sizeof(val)];
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_blob(dval, p);
+		if (memcmp(val, dval, sizeof(val)) != 0)
+		{
+			TEST_FAILURE;
+		}
+		p += (4 + sizeof(val));
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+#endif // BLOB_SERIALIZATION_ALLOWED
+
+#ifdef BELOB_SERIALIZATION_ALLOWED
+#include <string.h>
+NEW_TEST(to_stream_serialize_belob)
+	stream_ptr_t stream;
+	FlwSt st;
+	char val[] =
+		"Interesting long value 1234567890 "
+		"+_)(*&^%$#@!~=-`[];',./{}:\"<>?\\|";
+
+	size_t iterations    = 64;
+	size_t max_capacity  = 2 * iterations * (8 + sizeof(val));
+	size_t init_capacity = max_capacity / 2;
+	// create stream
+	st = new_stream(&stream, DEF_MEM_MNGR, max_capacity, init_capacity);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// write until init capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_belob(stream, val, sizeof(val));
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != init_capacity
+	       || (*stream).metha.available != 0
+		) {
+		TEST_FAILURE;
+	}
+	// write until max capacity
+	for (int i = 0; i < iterations; ++i)
+	{
+		st = stream_belob(stream, val, sizeof(val));
+		if (is_flow_not_succeeded(st))
+		{
+			TEST_FAILURE;
+		}
+	}
+	if (   (*stream).metha.capacity  != max_capacity
+	       || (*stream).metha.available != 0
+		) {
+		TEST_FAILURE;
+	}
+	// no more space
+	st = stream_belob(stream, val, sizeof(val));
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// check memory values
+	uint8_t *p = ((*stream).mem_ptr);
+	char dval[sizeof(val)];
+	for (int i = 0; i < 2 * iterations; ++i)
+	{
+		deserialize_belob(&dval, p);
+		if (memcmp(val, dval, sizeof(val)) != 0)
+		{
+			TEST_FAILURE;
+		}
+		p += (8 + sizeof(val));
+	}
+	// delete stream
+	st = delete_stream(&stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+#endif // BELOB_SERIALIZATION_ALLOWED
+
 INIT_TESTS_CHECKS
 	CHECK_TEST(TEST_CHECK_UP, constants_check);
 	CHECK_TEST(TEST_CHECK_UP, increase_functions_check);
@@ -1237,4 +1383,10 @@ INIT_TESTS_CHECKS
 #ifdef DOUBLE_SERIALIZATION_ALLOWED
 	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_double);
 #endif // DOUBLE_SERIALIZATION_ALLOWED
+#ifdef BLOB_SERIALIZATION_ALLOWED
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_blob);
+#endif // BLOB_SERIALIZATION_ALLOWED
+#ifdef BELOB_SERIALIZATION_ALLOWED
+	CHECK_TEST(TEST_CHECK_UP, to_stream_serialize_belob);
+#endif // BELOB_SERIALIZATION_ALLOWED
 DONE_TESTS_CHECKS
