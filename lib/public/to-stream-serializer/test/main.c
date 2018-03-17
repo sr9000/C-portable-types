@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <to-stream-serializer.h>
 
 #include "test.h"
 #include "to-stream-serializer.h"
@@ -162,7 +163,7 @@ TEST_FINISHED
 NEW_TEST(stream_consistency_check)
 	FlwSt st;
 	stream_ptr_t stream;
-	uint8_t mem[10];
+	uint8_t mem[10 * sizeof(uint8_t)];
 	void *non_null_ptr = &mem[0];
 	// NULL stream
 	stream = NULL;
@@ -198,7 +199,7 @@ NEW_TEST(stream_consistency_check)
 	}
 	// memory pointers
 	real_stream.mem_ptr         = &mem[0];
-	real_stream.free_mem_ptr    = &mem[3];
+	real_stream.free_mem_ptr    = &mem[3 * sizeof(uint8_t)];
 	real_stream.metha.available = 6;
 	real_stream.metha.capacity  = 10;
 	st = check_stream_consistency(stream);
@@ -226,6 +227,296 @@ NEW_TEST(stream_consistency_check)
 	{
 		TEST_FAILURE;
 	}
+	// successful consistency
+	// zero capacity, null ptrs
+	real_stream.free_mem_ptr = NULL;
+	real_stream.mem_ptr      = NULL;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 0;
+	real_stream.metha.capacity     = 0;
+	real_stream.metha.max_capacity = 0;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// zero capacity, null ptrs, non zero max capacity
+	real_stream.free_mem_ptr = NULL;
+	real_stream.mem_ptr      = NULL;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 0;
+	real_stream.metha.capacity     = 0;
+	real_stream.metha.max_capacity = 100;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// capacity == availabble, freeptr==memptr
+	real_stream.free_mem_ptr = non_null_ptr;
+	real_stream.mem_ptr      = non_null_ptr;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 1;
+	real_stream.metha.capacity     = 1;
+	real_stream.metha.max_capacity = 0;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// capacity == availabble, freeptr==memptr
+	real_stream.free_mem_ptr = non_null_ptr;
+	real_stream.mem_ptr      = non_null_ptr;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 100;
+	real_stream.metha.capacity     = 100;
+	real_stream.metha.max_capacity = 0;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// non zero max capacity == capacity == availabble, freeptr==memptr
+	real_stream.free_mem_ptr = non_null_ptr;
+	real_stream.mem_ptr      = non_null_ptr;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 100;
+	real_stream.metha.capacity     = 100;
+	real_stream.metha.max_capacity = 100;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// non zero max capacity != capacity == availabble, freeptr==memptr
+	real_stream.free_mem_ptr = non_null_ptr;
+	real_stream.mem_ptr      = non_null_ptr;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 100;
+	real_stream.metha.capacity     = 100;
+	real_stream.metha.max_capacity = 101;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// non zero max capacity != capacity == availabble, freeptr==memptr
+	real_stream.free_mem_ptr = non_null_ptr;
+	real_stream.mem_ptr      = non_null_ptr;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 100;
+	real_stream.metha.capacity     = 100;
+	real_stream.metha.max_capacity = 900;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// non zero max capacity != capacity != availabble, freeptr==memptr
+	real_stream.free_mem_ptr = &mem[1 * sizeof(uint8_t)];
+	real_stream.mem_ptr      = &mem[0];
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 9;
+	real_stream.metha.capacity     = 10;
+	real_stream.metha.max_capacity = 100;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// non zero max capacity != capacity != availabble, freeptr==memptr
+	real_stream.free_mem_ptr = &mem[4 * sizeof(uint8_t)];
+	real_stream.mem_ptr      = &mem[0];
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 6;
+	real_stream.metha.capacity     = 10;
+	real_stream.metha.max_capacity = 100;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// zero max capacity != capacity != availabble, freeptr==memptr
+	real_stream.free_mem_ptr = &mem[4 * sizeof(uint8_t)];
+	real_stream.mem_ptr      = &mem[0];
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 6;
+	real_stream.metha.capacity     = 10;
+	real_stream.metha.max_capacity = 0;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+	// non zero max capacity != capacity != zero availabble, freeptr==memptr
+	real_stream.free_mem_ptr = &mem[10 * sizeof(uint8_t)];
+	real_stream.mem_ptr      = &mem[0];
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 0;
+	real_stream.metha.capacity     = 10;
+	real_stream.metha.max_capacity = 0;
+	st = check_stream_consistency(stream);
+	if (is_flow_not_succeeded(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+
+NEW_TEST(stream_request_size)
+	FlwSt st;
+	struct struct_stream real_stream;
+	stream_ptr_t stream = &real_stream;
+	real_stream.mem_ptr  = NULL;
+	real_stream.mem_mngr = DEF_MEM_MNGR;
+	real_stream.metha.max_capacity = 0;
+	// available enough
+	real_stream.free_mem_ptr    = NULL;
+	real_stream.metha.available = 10;
+	real_stream.metha.capacity  = 10;
+	st = request_stream_size(stream, 5);
+	if (   is_flow_not_succeeded(st)
+	    || real_stream.metha.capacity  != 10
+	    || real_stream.metha.available != 10
+	) {
+		TEST_FAILURE;
+	}
+	// still enough
+	st = request_stream_size(stream, 10);
+	if (   is_flow_not_succeeded(st)
+	    || real_stream.metha.capacity  != 10
+	    || real_stream.metha.available != 10
+	) {
+		TEST_FAILURE;
+	}
+	// failed cause max capacity
+	real_stream.metha.max_capacity = 15;
+	real_stream.metha.available    = 10;
+	real_stream.metha.capacity     = 10;
+	st = request_stream_size(stream, 16);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	real_stream.metha.max_capacity = 10;
+	real_stream.metha.available    = 10;
+	real_stream.metha.capacity     = 10;
+	st = request_stream_size(stream, 11);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	// failed cause max capacity, available != capacity
+	real_stream.metha.max_capacity = 10;
+	real_stream.metha.available    = 9;
+	real_stream.metha.capacity     = 10;
+	st = request_stream_size(stream, 10);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	real_stream.metha.max_capacity = 10;
+	real_stream.metha.available    = 1;
+	real_stream.metha.capacity     = 10;
+	st = request_stream_size(stream, 2);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+	real_stream.metha.max_capacity = 12;
+	real_stream.metha.available    = 0;
+	real_stream.metha.capacity     = 10;
+	st = request_stream_size(stream, 3);
+	if (!is_flow_failed(st))
+	{
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+
+NEW_TEST(stream_request_size_with_real_memory)
+	FlwSt st;
+	struct struct_stream real_stream;
+	stream_ptr_t stream = &real_stream;
+	// successful realloc with limit
+	void *pmem = malloc(10 * sizeof(uint8_t));
+	real_stream.free_mem_ptr = (void *) (((uint8_t *) pmem) + 3);
+	real_stream.mem_ptr      = pmem;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 7;
+	real_stream.metha.capacity     = 10;
+	real_stream.metha.max_capacity = 13;
+	st = request_stream_size(stream, 10);
+	if (   is_flow_not_succeeded(st)
+	    || real_stream.metha.capacity  != 13
+	    || real_stream.metha.available != 10
+	) {
+		TEST_FAILURE;
+	}
+	free(real_stream.mem_ptr);
+	// successful realloc with far limit
+	pmem = malloc(10 * sizeof(uint8_t));
+	real_stream.free_mem_ptr = (void *) (((uint8_t *) pmem) + 3);
+	real_stream.mem_ptr      = pmem;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 7;
+	real_stream.metha.capacity     = 10;
+	real_stream.metha.max_capacity = 22;
+	st = request_stream_size(stream, 10);
+	if (   is_flow_not_succeeded(st)
+	    || real_stream.metha.capacity  != 21
+	    || real_stream.metha.available != 18
+	) {
+		TEST_FAILURE;
+	}
+	free(real_stream.mem_ptr);
+	// successful realloc with so far limit
+	pmem = malloc(10 * sizeof(uint8_t));
+	real_stream.free_mem_ptr = (void *) (((uint8_t *) pmem) + 3);
+	real_stream.mem_ptr      = pmem;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 7;
+	real_stream.metha.capacity     = 10;
+	real_stream.metha.max_capacity = 1000;
+	st = request_stream_size(stream, 10);
+	if (   is_flow_not_succeeded(st)
+	    || real_stream.metha.capacity  != 21
+	    || real_stream.metha.available != 18
+	) {
+		TEST_FAILURE;
+	}
+	free(real_stream.mem_ptr);
+	// successful realloc without limit
+	pmem = malloc(10 * sizeof(uint8_t));
+	real_stream.free_mem_ptr = (void *) (((uint8_t *) pmem) + 3);
+	real_stream.mem_ptr      = pmem;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.metha.available    = 7;
+	real_stream.metha.capacity     = 10;
+	real_stream.metha.max_capacity = 0;
+	st = request_stream_size(stream, 10);
+	if (   is_flow_not_succeeded(st)
+	    || real_stream.metha.capacity  != 21
+	    || real_stream.metha.available != 18
+	) {
+		TEST_FAILURE;
+	}
+	free(real_stream.mem_ptr);
+	// one 10th increment
+	pmem = malloc(10 * sizeof(uint8_t));
+	real_stream.free_mem_ptr = (void *) (((uint8_t *) pmem) + 3);
+	real_stream.mem_ptr      = pmem;
+	real_stream.mem_mngr     = DEF_MEM_MNGR;
+	real_stream.mem_mngr.pincrease = &inc_on_one10th;
+	real_stream.metha.available    = 7;
+	real_stream.metha.capacity     = 10;
+	real_stream.metha.max_capacity = 9903;
+	st = request_stream_size(stream, 9000);
+	if (   is_flow_not_succeeded(st)
+	    || real_stream.metha.capacity  != 9903
+	    || real_stream.metha.available != 9900
+		) {
+		TEST_FAILURE;
+	}
+	free(real_stream.mem_ptr);
 TEST_FINISHED
 
 INIT_TESTS_CHECKS
@@ -233,6 +524,8 @@ INIT_TESTS_CHECKS
 	CHECK_TEST(TEST_CHECK_UP, increase_functions_check);
 	CHECK_TEST(TEST_CHECK_UP, creating_functions_check);
 	CHECK_TEST(TEST_CHECK_UP, stream_consistency_check);
+	CHECK_TEST(TEST_CHECK_UP, stream_request_size);
+	CHECK_TEST(TEST_CHECK_UP, stream_request_size_with_real_memory);
 #ifdef BELOB_SERIALIZATION_ALLOWED
 #endif // BELOB_SERIALIZATION_ALLOWED
 DONE_TESTS_CHECKS

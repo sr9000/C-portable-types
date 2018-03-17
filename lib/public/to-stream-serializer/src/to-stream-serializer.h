@@ -67,11 +67,11 @@ typedef void * (*realloc_ptr_t) (void *, size_t);
  */
 typedef struct
 {
-	free_ptr_t    pfree;    //!< Pointer onto \c free function.
-	malloc_ptr_t  pmalloc;  //!< Pointer onto \c malloc function.
-	calloc_ptr_t  pcalloc;  //!< Pointer onto \c calloc function.
-	realloc_ptr_t prealloc; //!< Pointer onto \c realloc function.
-	void* nullptr_val;      //!< \em Null \em pointer special value.
+	free_ptr_t     pfree;       //!< Pointer onto \c free function.
+	malloc_ptr_t   pmalloc;     //!< Pointer onto \c malloc function.
+	calloc_ptr_t   pcalloc;     //!< Pointer onto \c calloc function.
+	realloc_ptr_t  prealloc;    //!< Pointer onto \c realloc function.
+	void          *nullptr_val; //!< \em Null \em pointer special value.
 } mem_allctr_t;
 
 /*!
@@ -141,8 +141,8 @@ size_t inc_on_one10th(size_t size);
  */
 typedef struct
 {
-	mem_allctr_t mem_allctr;  //!< \em Memory \em allocator
-	increase_ptr_t pincrease; //!< Size increasing function
+	mem_allctr_t   mem_allctr; //!< \em Memory \em allocator
+	increase_ptr_t pincrease;  //!< Size increasing function
 } mem_mngr_t;
 
 /*!
@@ -254,35 +254,35 @@ create_mem_mngr(
  * @param [in] pcalloc      Pointer onto \c calloc function.
  * @param [in] prealloc     Pointer onto \c realloc function.
  * @param [in] nullptr_val  \em Null \em pointer special value.
- * @param [in] pincrease Pointer onto \em size \em increase function.
+ * @param [in] pincrease    Pointer onto \em size \em increase function.
  * @return Filled \ref mem_mngr_t value with provided components.
  */
 mem_mngr_t
 create_mem_mngr_ex(
-	  free_ptr_t     pfree
-	, malloc_ptr_t   pmalloc
-	, calloc_ptr_t   pcalloc
-	, realloc_ptr_t  prealloc
-	, void          *nullptr_val
-	, increase_ptr_t pincrease
+	  free_ptr_t      pfree
+	, malloc_ptr_t    pmalloc
+	, calloc_ptr_t    pcalloc
+	, realloc_ptr_t   prealloc
+	, void           *nullptr_val
+	, increase_ptr_t  pincrease
 );
 
 /*!
  * @brief Create stream structure. You should always using \ref delete_stream
  * function when you have done all work with created stream.
- * @param [out] pstream      Pointer onto \ref stream_ptr_t.
- * @param [in] mngr          \em Memory \em manager.
- * @param [in] max_capacity  Maximum capacity of created stream. Use 0 value
+ * @param [out] pstream        Pointer onto \ref stream_ptr_t.
+ * @param [in]  mngr           \em Memory \em manager.
+ * @param [in]  max_capacity   Maximum capacity of created stream. Use 0 value
  * when you want a stream without upper bound for capacity.
- * @param [in] init_capacity Initial stream capacity.
+ * @param [in]  init_capacity  Initial stream capacity.
  * @return Status of operation (succeeded, failed, crashed).
  */
 FlwSt
 new_stream(
 	  stream_ptr_t *pstream
-	, mem_mngr_t mngr
-	, size_t max_capacity
-	, size_t init_capacity
+	, mem_mngr_t    mngr
+	, size_t        max_capacity
+	, size_t        init_capacity
 );
 
 /*!

@@ -3,10 +3,10 @@
 
 #define MACRO_DEF_MEM_ALLCTR_INITIALIZER \
 { \
-	  .pfree    = &free \
-	, .pmalloc  = &malloc \
-	, .pcalloc  = &calloc \
-	, .prealloc = &realloc \
+	  .pfree       = &free \
+	, .pmalloc     = &malloc \
+	, .pcalloc     = &calloc \
+	, .prealloc    = &realloc \
   , .nullptr_val = NULL }
 
 const mem_allctr_t
@@ -90,12 +90,12 @@ create_mem_mngr(
 
 mem_mngr_t
 create_mem_mngr_ex(
-	  free_ptr_t     pfree
-	, malloc_ptr_t   pmalloc
-	, calloc_ptr_t   pcalloc
-	, realloc_ptr_t  prealloc
-	, void          *nullptr_val
-	, increase_ptr_t pincrease
+	  free_ptr_t      pfree
+	, malloc_ptr_t    pmalloc
+	, calloc_ptr_t    pcalloc
+	, realloc_ptr_t   prealloc
+	, void           *nullptr_val
+	, increase_ptr_t  pincrease
 ) {
 	mem_mngr_t r;
 	r.mem_allctr =
@@ -150,9 +150,9 @@ FlwSt check_stream_consistency(stream_ptr_t stream)
 FlwSt
 new_stream(
 	  stream_ptr_t *pstream
-	, mem_mngr_t mngr
-	, size_t max_capacity
-	, size_t init_capacity
+	, mem_mngr_t    mngr
+	, size_t        max_capacity
+	, size_t        init_capacity
 ) {
 	if (   max_capacity != 0
 	    && max_capacity <  init_capacity
@@ -195,15 +195,15 @@ new_stream(
 
 FlwSt
 new_stream_ex(
-	  stream_ptr_t  *pstream
-	, free_ptr_t     pfree
-	, malloc_ptr_t   pmalloc
-	, calloc_ptr_t   pcalloc
-	, realloc_ptr_t  prealloc
-	, void          *nullptr_val
-	, increase_ptr_t pincrease
-	, size_t max_capacity
-	, size_t init_capacity
+	  stream_ptr_t   *pstream
+	, free_ptr_t      pfree
+	, malloc_ptr_t    pmalloc
+	, calloc_ptr_t    pcalloc
+	, realloc_ptr_t   prealloc
+	, void           *nullptr_val
+	, increase_ptr_t  pincrease
+	, size_t          max_capacity
+	, size_t          init_capacity
 ) {
 	return
 		new_stream(
@@ -248,7 +248,7 @@ FlwSt delete_stream(stream_ptr_t *pstream)
 FlwSt
 request_stream_size(
 	  stream_ptr_t stream
-	, size_t size
+	, size_t       size
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	// check available space
@@ -287,6 +287,12 @@ request_stream_size(
 			break;
 		}
 		new_capacity = tmp;
+	}
+	// limit new capacity with max capacity
+	if (   (*stream).metha.max_capacity > 0
+	    && (*stream).metha.max_capacity < new_capacity
+	) {
+		new_capacity = (*stream).metha.max_capacity;
 	}
 	// check new capacity are greater than 0
 	if (new_capacity <= 0)
@@ -342,8 +348,8 @@ request_stream_size(
 
 FlwSt
 get_stream_size(
-	  size_t *psize
-	, stream_ptr_t stream
+	  size_t       *psize
+	, stream_ptr_t  stream
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -357,8 +363,8 @@ get_stream_size(
 
 FlwSt
 get_stream_content_pointer(
-	  void** content_ptr
-	, stream_ptr_t stream
+	  void         **content_ptr
+	, stream_ptr_t   stream
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -374,7 +380,7 @@ get_stream_content_pointer(
 FlwSt
 stream_int8_t(
 	  stream_ptr_t stream
-	, int8_t value
+	, int8_t       value
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -386,7 +392,7 @@ stream_int8_t(
 FlwSt
 stream_uint8_t(
 	  stream_ptr_t stream
-	, uint8_t value
+	, uint8_t      value
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -400,7 +406,7 @@ stream_uint8_t(
 FlwSt
 stream_int16_t(
 	  stream_ptr_t stream
-	, int16_t value
+	, int16_t      value
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -412,7 +418,7 @@ stream_int16_t(
 FlwSt
 stream_uint16_t(
 	  stream_ptr_t stream
-	, uint16_t value
+	, uint16_t     value
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -426,7 +432,7 @@ stream_uint16_t(
 FlwSt
 stream_int32_t(
 	  stream_ptr_t stream
-	, int32_t value
+	, int32_t      value
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -438,7 +444,7 @@ stream_int32_t(
 FlwSt
 stream_uint32_t(
 	  stream_ptr_t stream
-	, uint32_t value
+	, uint32_t     value
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -452,7 +458,7 @@ stream_uint32_t(
 FlwSt
 stream_int64_t(
 	  stream_ptr_t stream
-	, int64_t value
+	, int64_t      value
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -464,7 +470,7 @@ stream_int64_t(
 FlwSt
 stream_uint64_t(
 	  stream_ptr_t stream
-	, uint64_t value
+	, uint64_t     value
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -478,7 +484,7 @@ stream_uint64_t(
 FlwSt
 stream_float(
 	  stream_ptr_t stream
-	, float value
+	, float        value
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -492,7 +498,7 @@ stream_float(
 FlwSt
 stream_double(
 	  stream_ptr_t stream
-	, double value
+	, double       value
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -505,9 +511,9 @@ stream_double(
 #ifdef BLOB_SERIALIZATION_ALLOWED
 FlwSt
 stream_blob(
-	  stream_ptr_t stream
-	, void *data
-	, uint32_t size
+	  stream_ptr_t  stream
+	, void         *data
+	, uint32_t      size
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
@@ -525,9 +531,9 @@ stream_blob(
 #ifdef BELOB_SERIALIZATION_ALLOWED
 FlwSt
 stream_belob(
-	  stream_ptr_t stream
-	, void *data
-	, uint64_t size
+	  stream_ptr_t  stream
+	, void         *data
+	, uint64_t      size
 ) {
 	STREAM_NOT_NULL_ELSE_FAILED(stream);
 	STREAM_CONSISTENT_ELSE_CRASHED(stream);
