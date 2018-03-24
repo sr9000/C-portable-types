@@ -312,14 +312,74 @@ default_aflw_processor(
 	Aflw aflw
 );
 
+/**
+ * @def AFLOW_VAR
+ * @brief \c define for internal purposes in other macroses
+ */
 #define AFLOW_VAR fe75a94dccc1a2fc78a0bb224e6618f4
 
+/**
+ * @def INIT_ADVANCED_FLOW_CONTROL
+ * @brief Initialize advanced flow context.
+ * @details You <b>must</b> call this \c define at most begin of your function,
+ * if you are writing function, that return advanced flow state \ref Aflw.
+ */
 #define INIT_ADVANCED_FLOW_CONTROL \
 	Aflw AFLOW_VAR;
 
+/**
+ * @def FLOW
+ * @brief Wrap execution of advanced flow function.
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	FLOW aflw_another_func() PASS;
+ * 	SWITCH_SIGNAL
+ * 		CASE_SIGNAL(leet_signal)
+ * 			do_some_leet_work();    // Yay, l33T ev3ry\/3re 4ev3r
+ * 			AFLOW_FINISH_SUCCEEDED; // finish here
+ * 		CASE_SIGNAL(zero_signal)
+ * 			do_zero_work();
+ * 			in_several_instructions();
+ * 	END_SWITCH_SIGNAL
+ * 	// use local variables if you need return custom AFLOW
+ * 	Aflw aflw = make_aflw(FLW_ST.succeeded, make_signal_code2(123, 456));
+ * 	AFLOW_FINISH_WITH(aflw);
+ * }
+ * @endcode.
+ */
 #define FLOW \
 	AFLOW_VAR =
 
+/**
+ * @def PASS
+ * @brief Break execution flow if previous flow calling is not successful.
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	FLOW aflw_another_func() PASS;
+ * 	SWITCH_SIGNAL
+ * 		CASE_SIGNAL(leet_signal)
+ * 			do_some_leet_work();    // Yay, l33T ev3ry\/3re 4ev3r
+ * 			AFLOW_FINISH_SUCCEEDED; // finish here
+ * 		CASE_SIGNAL(zero_signal)
+ * 			do_zero_work();
+ * 			in_several_instructions();
+ * 	END_SWITCH_SIGNAL
+ * 	// use local variables if you need return custom AFLOW
+ * 	Aflw aflw = make_aflw(FLW_ST.succeeded, make_signal_code2(123, 456));
+ * 	AFLOW_FINISH_WITH(aflw);
+ * }
+ * @endcode.
+ */
 #define PASS \
 	; \
 	if (is_not_aflw_succeeded(AFLOW_VAR)) \
@@ -327,6 +387,33 @@ default_aflw_processor(
 		return default_aflw_processor(AFLOW_VAR); \
 	} ;
 
+/**
+ * @def PASS_WITH(aflw_processor_func_name)
+ * @brief Like \ref PASS_WITH but uses special \ref Aflw processor.
+ * @param aflw_processor_func_name  \ref Aflw processor, see \ref
+ * default_aflw_processor for details
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	FLOW aflw_another_func() PASS;
+ * 	SWITCH_SIGNAL
+ * 		CASE_SIGNAL(leet_signal)
+ * 			do_some_leet_work();    // Yay, l33T ev3ry\/3re 4ev3r
+ * 			AFLOW_FINISH_SUCCEEDED; // finish here
+ * 		CASE_SIGNAL(zero_signal)
+ * 			do_zero_work();
+ * 			in_several_instructions();
+ * 	END_SWITCH_SIGNAL
+ * 	// use local variables if you need return custom AFLOW
+ * 	Aflw aflw = make_aflw(FLW_ST.succeeded, make_signal_code2(123, 456));
+ * 	AFLOW_FINISH_WITH(aflw);
+ * }
+ * @endcode.
+ */
 #define PASS_WITH(aflw_processor_func_name) \
 	; \
 	if (is_not_aflw_succeeded(AFLOW_VAR)) \
@@ -334,14 +421,99 @@ default_aflw_processor(
 		return (aflw_processor_func_name)(AFLOW_VAR); \
 	} ;
 
+/**
+ * @def SWITCH_SIGNAL
+ * @brief Start switch by signals of last executed advanced flow.
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	FLOW aflw_another_func() PASS;
+ * 	SWITCH_SIGNAL
+ * 		CASE_SIGNAL(leet_signal)
+ * 			do_some_leet_work();    // Yay, l33T ev3ry\/3re 4ev3r
+ * 			AFLOW_FINISH_SUCCEEDED; // finish here
+ * 		CASE_SIGNAL(zero_signal)
+ * 			do_zero_work();
+ * 			in_several_instructions();
+ * 	END_SWITCH_SIGNAL
+ * 	// use local variables if you need return custom AFLOW
+ * 	Aflw aflw = make_aflw(FLW_ST.succeeded, make_signal_code2(123, 456));
+ * 	AFLOW_FINISH_WITH(aflw);
+ * }
+ * @endcode.
+ */
 #define SWITCH_SIGNAL \
 	; \
 	if (is_siganls_equal((AFLOW_VAR).signal, SIGNAL_CODE.empty)) {
 
+/**
+ * @def CASE_SIGNAL(case_signal)
+ * @brief Defines handler block for specific signal \ref signal_code_t \p
+ * case_signal.
+ * @param case_signal  Signal \ref signal_code_t that expected after execution
+ * of last advanced flow
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	FLOW aflw_another_func() PASS;
+ * 	SWITCH_SIGNAL
+ * 		CASE_SIGNAL(leet_signal)
+ * 			do_some_leet_work();    // Yay, l33T ev3ry\/3re 4ev3r
+ * 			AFLOW_FINISH_SUCCEEDED; // finish here
+ * 		CASE_SIGNAL(zero_signal)
+ * 			do_zero_work();
+ * 			in_several_instructions();
+ * 	END_SWITCH_SIGNAL
+ * 	// use local variables if you need return custom AFLOW
+ * 	Aflw aflw = make_aflw(FLW_ST.succeeded, make_signal_code2(123, 456));
+ * 	AFLOW_FINISH_WITH(aflw);
+ * }
+ * @endcode.
+ */
 #define CASE_SIGNAL(case_signal) \
-	} else if(is_siganls_equal((AFLOW_VAR).signal, (case_signal))) \
-	{
+	} else if(is_siganls_equal((AFLOW_VAR).signal, (case_signal))) {
 
+/**
+ * @def CASE_SIGNAL_WITH(case_function_takes_signal_code_t_return_bool)
+ * @brief Like \ref CASE_SIGNAL(case_signal) but uses \p
+ * case_function_takes_signal_code_t_return_bool as custom condition.
+ * @param case_function_takes_signal_code_t_return_bool Function like this:
+ * @code{.c}
+ * bool processor(signal_code_t signal_code)
+ * {
+ * 	// some checks
+ * }
+ * @endcode
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	FLOW aflw_another_func() PASS;
+ * 	SWITCH_SIGNAL
+ * 		CASE_SIGNAL(leet_signal)
+ * 			do_some_leet_work();    // Yay, l33T ev3ry\/3re 4ev3r
+ * 			AFLOW_FINISH_SUCCEEDED; // finish here
+ * 		CASE_SIGNAL(zero_signal)
+ * 			do_zero_work();
+ * 			in_several_instructions();
+ * 	END_SWITCH_SIGNAL
+ * 	// use local variables if you need return custom AFLOW
+ * 	Aflw aflw = make_aflw(FLW_ST.succeeded, make_signal_code2(123, 456));
+ * 	AFLOW_FINISH_WITH(aflw);
+ * }
+ * @endcode.
+ */
 #define CASE_SIGNAL_WITH(case_function_takes_signal_code_t_return_bool) \
 	} else if( \
 		(case_function_takes_signal_code_t_return_bool)( \
@@ -349,27 +521,111 @@ default_aflw_processor(
 		) \
 	) {
 
+/**
+ * @def END_SWITCH_SIGNAL
+ * @brief End of SWITCH-CASE_SIGNAL block.
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	FLOW aflw_another_func() PASS;
+ * 	SWITCH_SIGNAL
+ * 		CASE_SIGNAL(leet_signal)
+ * 			do_some_leet_work();    // Yay, l33T ev3ry\/3re 4ev3r
+ * 			AFLOW_FINISH_SUCCEEDED; // finish here
+ * 		CASE_SIGNAL(zero_signal)
+ * 			do_zero_work();
+ * 			in_several_instructions();
+ * 	END_SWITCH_SIGNAL
+ * 	// use local variables if you need return custom AFLOW
+ * 	Aflw aflw = make_aflw(FLW_ST.succeeded, make_signal_code2(123, 456));
+ * 	AFLOW_FINISH_WITH(aflw);
+ * }
+ * @endcode.
+ */
 #define END_SWITCH_SIGNAL \
 	} ;
 
+/**
+ * @def AFLOW_FINISH_WITH(aflw)
+ * @brief Finish advanced flow with state \p aflw.
+ * @param aflw  Resulting state of advanced flow execution
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	FLOW aflw_another_func() PASS;
+ * 	SWITCH_SIGNAL
+ * 		CASE_SIGNAL(leet_signal)
+ * 			do_some_leet_work();    // Yay, l33T ev3ry\/3re 4ev3r
+ * 			AFLOW_FINISH_SUCCEEDED; // finish here
+ * 		CASE_SIGNAL(zero_signal)
+ * 			do_zero_work();
+ * 			in_several_instructions();
+ * 	END_SWITCH_SIGNAL
+ * 	// use local variables if you need return custom AFLOW
+ * 	Aflw aflw = make_aflw(FLW_ST.succeeded, make_signal_code2(123, 456));
+ * 	AFLOW_FINISH_WITH(aflw);
+ * }
+ * @endcode.
+ */
 #define AFLOW_FINISH_WITH(aflw) \
 	return (aflw);
 
+/**
+ * @def AFLOW_FINISH_SUCCEEDED
+ * @brief Finish advanced flow successfully.
+ * @details See \ref AFLOW_FINISH_WITH(aflw) for example usage.
+ */
 #define AFLOW_FINISH_SUCCEEDED \
 	return make_succeeded_aflw();
 
+/**
+ * @def AFLOW_FINISH_SUCCEEDED_WITH(signal)
+ * @brief Finish advanced flow successfully and returns signal \p signal.
+ * @param signal  Signal \ref signal_code_t
+ * @details See \ref AFLOW_FINISH_WITH(aflw) for example usage.
+ */
 #define AFLOW_FINISH_SUCCEEDED_WITH(signal) \
 	return make_succeeded_aflw_signal(signal);
 
+/**
+ * @def AFLOW_FINISH_FAILED
+ * @brief Finish advanced flow with failed state.
+ * @details See \ref AFLOW_FINISH_WITH(aflw) for example usage.
+ */
 #define AFLOW_FINISH_FAILED \
 	return make_failed_aflw();
 
+/**
+ * @def AFLOW_FINISH_FAILED_WITH(signal)
+ * @brief Finish advanced flow with failed state and returns signal \p signal.
+ * @param signal  Signal \ref signal_code_t
+ * @details See \ref AFLOW_FINISH_WITH(aflw) for example usage.
+ */
 #define AFLOW_FINISH_FAILED_WITH(signal) \
 	return make_failed_aflw_signal(signal);
 
+/**
+ * @def AFLOW_FINISH_FAILED
+ * @brief Finish advanced flow with crashed state.
+ * @details See \ref AFLOW_FINISH_WITH(aflw) for example usage.
+ */
 #define AFLOW_FINISH_CRASHED \
 	return make_crashed_aflw();
 
+/**
+ * @def AFLOW_FINISH_CRASHED_WITH(signal)
+ * @brief Finish advanced flow with crashed state and returns signal \p signal.
+ * @param signal  Signal \ref signal_code_t
+ * @details See \ref AFLOW_FINISH_WITH(aflw) for example usage.
+ */
 #define AFLOW_FINISH_CRASHED_WITH(signal) \
 	return make_crashed_aflw_signal(signal);
 
