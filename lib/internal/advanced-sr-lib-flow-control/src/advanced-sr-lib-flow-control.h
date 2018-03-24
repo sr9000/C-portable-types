@@ -72,9 +72,7 @@ is_not_siganls_equal(
 	, signal_code_t signal2
 );
 
-typedef struct struct_aflw Aflw;
-
-struct struct_aflw
+typedef struct struct_aflw
 {
 	FlwSt          flow_state;
 	signal_code_t  signal;
