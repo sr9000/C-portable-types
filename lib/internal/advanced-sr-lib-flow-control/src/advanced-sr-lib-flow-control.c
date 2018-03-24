@@ -246,3 +246,10 @@ is_aflw_crashed(
 ) {
 	return is_flow_crashed(aflw.flow_state);
 }
+
+Aflw
+default_aflw_processor(
+	Aflw aflw
+) {
+	return aflw;
+}

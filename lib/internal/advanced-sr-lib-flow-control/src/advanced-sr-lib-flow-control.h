@@ -235,42 +235,78 @@ Aflw
 make_crashed_aflw();
 
 /*!
- * @brief Check advanced flow state has .
- * @param [in] signal1  First signal value
- * @param [in] signal2  Second signal value
- * @details Check that \p signal1 and \p signal2 are <b>not</b> the same.
- * @return \c false if signal are the same, \c true else
+ * @brief Check advanced flow state has nonempty signal value \ref
+ * signal_code_t.
+ * @param [in] aflw  Advanced flow state
+ * @return \c true if advanced flow state has non empty signal value, \c false
+ * else
  */
 bool
 has_aflw_signal(
 	Aflw aflw
 );
 
+/*!
+ * @brief Inverse of \ref has_aflw_signal.
+ * @param [in] aflw  Advanced flow state
+ * @return \c false if advanced flow state has non empty signal value, \c true
+ * else
+ */
 bool
 has_not_aflw_signal(
 	Aflw aflw
 );
 
+/**
+ * @brief Returns, only if advanced flow finished successfully.
+ * @param [in] aflw  Advanced flow execution result
+ * @return \c true if flow finished successfully, \c false else
+ */
 bool
 is_aflw_succeeded(
 	Aflw aflw
 );
 
+/**
+ * @brief Inverse of \ref is_aflw_succeeded.
+ * @param [in] aflw  Advanced flow execution result
+ * @return \c false if flow finished successfully, \c true else
+ */
 bool
 is_not_aflw_succeeded(
 	Aflw aflw
 );
 
+/**
+ * @brief Returns, only if logic error detected.
+ * @param [in] aflw  Advanced flow execution result
+ * @return \c true if logic error detected, \c false else
+ */
 bool
 is_aflw_failed(
 	Aflw aflw
 );
 
+/**
+ * @brief Returns, only if error with irreversible side effects detected.
+ * @param [in] aflw  Advanced flow execution result
+ * @return \c true if logic error with irreversible side effects detected, \c
+ * false else
+ */
 bool
 is_aflw_crashed(
 	Aflw aflw
 );
 
+/**
+ * @brief Default processor that creates new advanced flow state from given.
+ * @param [in] aflw  Advanced flow execution result
+ * @details Creates new advanced flow state, based on advanced flow execution
+ * result for not successfully finished flow. That processor just return \p
+ * aflw as a result.
+ * @return New advanced flow state, that should be returned from calling
+ * function.
+ */
 Aflw
 default_aflw_processor(
 	Aflw aflw
