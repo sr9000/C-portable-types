@@ -14,6 +14,7 @@
 
 #include "flow-control.h"
 
+
 // check existing "bool" "true" and "false" macroses
 #if __bool_true_false_are_defined != 1
 #error "Can not be compiled cause <stdbool.h> did not "\
@@ -23,9 +24,8 @@
 #endif
 
 /*!
- * @typedef signal_code_t
  * @brief   Type to store signals.
- * @details Signals should be used to more rich interaction between methods.
+ * @details Signals should be used to rich interaction between methods.
  * Signals can indicate different causes of failure or status of successfully
  * executed methods. Use methods \ref make_signal_code1 \ref make_signal_code2
  * \ref make_signal_code3 or \ref make_signal_code4 to create correct signal
@@ -109,7 +109,7 @@ make_signal_code3(
  * @details Creates signal values, using all four code values. Signal value,
  * that are created by \ref make_signal_code4 can represent
  * <b>18,446 744 073,709 551 616</b> different values.
- * @warning Each \code value of type \c unsigned \c int according to C11
+ * @warning Each \c value of type \c unsigned \c int according to C11
  * standard can represent values from range 0..65535
  * @return Correctly initialized signal value
  */
@@ -129,33 +129,32 @@ make_signal_code4(
  * @return \c true if signal aere the same, \c false else
  */
 bool
-is_siganls_equal(
+is_signals_equal(
 	  signal_code_t signal1
 	, signal_code_t signal2
 );
 
 /*!
- * @brief Inverse to \ref is_siganls_equal.
+ * @brief Inverse to \ref is_signals_equal.
  * @param [in] signal1  First signal value
  * @param [in] signal2  Second signal value
  * @details Check that \p signal1 and \p signal2 are <b>not</b> the same.
  * @return \c false if signal are the same, \c true else
  */
 bool
-is_not_siganls_equal(
+is_not_signals_equal(
 	  signal_code_t signal1
 	, signal_code_t signal2
 );
 
 /*!
- * @typedef Aflw
  * @brief   Advanced flow state.
  * @details Contains as flow state as signal code for rich method interaction.
  */
-typedef struct struct_aflw
+typedef struct
 {
-	FlwSt          flow_state; //<! State: \c succeeded, \c failed or \c crashed
-	signal_code_t  signal;     //<! Signal, meaning is determined by developer
+	FlwSt          flow_state; //!< State: \c succeeded, \c failed or \c crashed
+	signal_code_t  signal;     //!< Signal, meaning is determined by developer
 } Aflw;
 
 /*!
@@ -316,7 +315,8 @@ default_aflw_processor(
  * @def AFLOW_VAR
  * @brief \c define for internal purposes in other macroses
  */
-#define AFLOW_VAR fe75a94dccc1a2fc78a0bb224e6618f4
+#define AFLOW_VAR \
+	fe75a94dccc1a2fc78a0bb224e6618f4
 
 /**
  * @def INIT_ADVANCED_FLOW_CONTROL
@@ -326,6 +326,7 @@ default_aflw_processor(
  */
 #define INIT_ADVANCED_FLOW_CONTROL \
 	Aflw AFLOW_VAR;
+
 
 /**
  * @def FLOW
@@ -448,7 +449,7 @@ default_aflw_processor(
  */
 #define SWITCH_SIGNAL \
 	; \
-	if (is_siganls_equal((AFLOW_VAR).signal, SIGNAL_CODE.empty)) {
+	if (is_signals_equal((AFLOW_VAR).signal, SIGNAL_CODE.empty)) {
 
 /**
  * @def CASE_SIGNAL(case_signal)
@@ -479,7 +480,7 @@ default_aflw_processor(
  * @endcode.
  */
 #define CASE_SIGNAL(case_signal) \
-	} else if(is_siganls_equal((AFLOW_VAR).signal, (case_signal))) {
+	} else if(is_signals_equal((AFLOW_VAR).signal, (case_signal))) {
 
 /**
  * @def CASE_SIGNAL_WITH(case_function_takes_signal_code_t_return_bool)
@@ -613,7 +614,7 @@ default_aflw_processor(
 	return make_failed_aflw_signal(signal);
 
 /**
- * @def AFLOW_FINISH_FAILED
+ * @def AFLOW_FINISH_CRASHED
  * @brief Finish advanced flow with crashed state.
  * @details See \ref AFLOW_FINISH_WITH(aflw) for example usage.
  */
