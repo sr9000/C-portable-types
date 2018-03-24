@@ -61,9 +61,9 @@ SIGNAL_CODE = {
 };
 
 /*!
- * @brief Create signal value \ref signal_code_t from one code value.
+ * @brief Create signal value from one code value.
  * @param [in] code1  Code value
- * @return Corectly initialized signal value \ref signal_code_t
+ * @return Correctly initialized signal value
  */
 signal_code_t
 make_signal_code1(
@@ -71,12 +71,12 @@ make_signal_code1(
 );
 
 /*!
- * @brief Create signal value \ref signal_code_t from one code value.
+ * @brief Create signal value from pair of code values.
  * @param [in] code1  First part of code value
  * @param [in] code2  Second part of code value
  * @details Creates signal values, using twice more code values than \ref
  * make_signal_code1.
- * @return Corectly initialized signal value \ref signal_code_t
+ * @return Correctly initialized signal value
  */
 signal_code_t
 make_signal_code2(
@@ -85,13 +85,13 @@ make_signal_code2(
 );
 
 /*!
- * @brief Create signal value \ref signal_code_t from one code value.
+ * @brief Create signal value from three code values.
  * @param [in] code1  First part of code value
  * @param [in] code2  Second part of code value
  * @param [in] code3  Third part of code value
  * @details Creates signal values, using even more code values than \ref
  * make_signal_code2.
- * @return Corectly initialized signal value \ref signal_code_t
+ * @return Correctly initialized signal value
  */
 signal_code_t
 make_signal_code3(
@@ -101,7 +101,7 @@ make_signal_code3(
 );
 
 /*!
- * @brief Create signal value \ref signal_code_t from one code value.
+ * @brief Create signal value from four code values.
  * @param [in] code1  First part of code value
  * @param [in] code2  Second part of code value
  * @param [in] code3  Third part of code value
@@ -111,7 +111,7 @@ make_signal_code3(
  * <b>18,446 744 073,709 551 616</b> different values.
  * @warning Each \code value of type \c unsigned \c int according to C11
  * standard can represent values from range 0..65535
- * @return Corectly initialized signal value \ref signal_code_t
+ * @return Correctly initialized signal value
  */
 signal_code_t
 make_signal_code4(
@@ -122,7 +122,7 @@ make_signal_code4(
 );
 
 /*!
- * @brief Compare two signal value \ref signal_code_t.
+ * @brief Compare two signal value.
  * @param [in] signal1  First signal value
  * @param [in] signal2  Second signal value
  * @details Check that \p signal1 and \p signal2 are the same.
@@ -155,44 +155,92 @@ is_not_siganls_equal(
 typedef struct struct_aflw
 {
 	FlwSt          flow_state; //<! State: \c succeeded, \c failed or \c crashed
-	signal_code_t  signal;     //<! Signal, Meaning is determined by developer
+	signal_code_t  signal;     //<! Signal, meaning is determined by developer
 } Aflw;
 
+/*!
+ * @brief Create advanced flow state value.
+ * @param [in] flow_state  Flow state
+ * @param [in] signal      Signal with special meaning
+ * @return Correctly initialized advanced flow state value
+ */
 Aflw
 make_aflw_signal(
 	  FlwSt         flow_state
 	, signal_code_t signal
 );
 
+/*!
+ * @brief Create <b>succeeded</b> advanced flow state value.
+ * @param [in] signal  Signal with special meaning
+ * @return Correctly initialized advanced flow state value
+ */
 Aflw
 make_succeeded_aflw_signal(
 	signal_code_t signal
 );
 
+/*!
+ * @brief Create <b>failed</b> advanced flow state value.
+ * @param [in] signal  Signal with special meaning
+ * @return Correctly initialized advanced flow state value
+ */
 Aflw
 make_failed_aflw_signal(
 	signal_code_t signal
 );
 
+/*!
+ * @brief Create <b>crashed</b> advanced flow state value.
+ * @param [in] signal  Signal with special meaning
+ * @return Correctly initialized advanced flow state value
+ */
 Aflw
 make_crashed_aflw_signal(
 	signal_code_t signal
 );
 
+/*!
+ * @brief Create advanced flow state value without signal \ref signal_code_t.
+ * @param [in] flow_state  Flow state
+ * @return Correctly initialized advanced flow state value
+ */
 Aflw
 make_aflw(
 	FlwSt flow_state
 );
 
+/*!
+ * @brief Create <b>succeeded</b> advanced flow state value without signal \ref
+ * signal_code_t.
+ * @return Correctly initialized advanced flow state value
+ */
 Aflw
 make_succeeded_aflw();
 
+/*!
+ * @brief Create <b>failed</b> advanced flow state value without signal \ref
+ * signal_code_t.
+ * @return Correctly initialized advanced flow state value
+ */
 Aflw
 make_failed_aflw();
 
+/*!
+ * @brief Create <b>crashed</b> advanced flow state value without signal \ref
+ * signal_code_t.
+ * @return Correctly initialized advanced flow state value
+ */
 Aflw
 make_crashed_aflw();
 
+/*!
+ * @brief Check advanced flow state has .
+ * @param [in] signal1  First signal value
+ * @param [in] signal2  Second signal value
+ * @details Check that \p signal1 and \p signal2 are <b>not</b> the same.
+ * @return \c false if signal are the same, \c true else
+ */
 bool
 has_aflw_signal(
 	Aflw aflw
