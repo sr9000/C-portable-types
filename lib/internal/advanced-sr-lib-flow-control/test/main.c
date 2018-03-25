@@ -1,6 +1,7 @@
 #include <advanced-sr-lib-flow-control.h>
-#include "advanced-sr-lib-flow-control.h"
 #include "test.h"
+#include "advanced-sr-lib-flow-control.h"
+#include "internal/advanced-sr-lib-flow-control.h"
 
 NEW_TEST(test_signal_code_empty)
 	if (   SIGNAL_CODE.empty.active_codes_number != 0
@@ -59,6 +60,78 @@ NEW_TEST(test_make_signal_codes)
 	}
 TEST_FINISHED
 
+NEW_TEST(test_signals_internal_compairing)
+	unsigned int randUint1[] = {19122, 28348, 29103, 45541};
+	unsigned int randUint2[] = {14094, 16612, 23534, 51616};
+	signal_code_t s1, s2;
+	s1 = SIGNAL_CODE.empty;
+	s2 = SIGNAL_CODE.empty;
+
+	s1.code1 = randUint1[0];
+	s1.code2 = randUint1[1];
+	s1.code3 = randUint1[2];
+	s1.code4 = randUint1[3];
+
+	s2.code1 = randUint2[0];
+	s2.code2 = randUint2[1];
+	s2.code3 = randUint2[2];
+	s2.code4 = randUint2[3];
+
+	if (   !is_signals_equal(s1, s2)
+	    ||  is_not_signals_equal(s1, s2)
+	) {
+		TEST_FAILURE;
+	}
+
+	s1.code1 = s2.code1 = randUint1[0];
+	if (!is_signals_code1_equal(s1, s2))
+	{
+		TEST_FAILURE;
+	}
+	s1.active_codes_number = s2.active_codes_number = 1;
+	if (   !is_signals_equal(s1, s2)
+	    ||  is_not_signals_equal(s1, s2)
+	) {
+		TEST_FAILURE;
+	}
+
+	s1.code2 = s2.code2 = randUint1[1];
+	if (!is_signals_code2_equal(s1, s2))
+	{
+		TEST_FAILURE;
+	}
+	s1.active_codes_number = s2.active_codes_number = 2;
+	if (   !is_signals_equal(s1, s2)
+	    ||  is_not_signals_equal(s1, s2)
+	) {
+		TEST_FAILURE;
+	}
+
+	s1.code3 = s2.code3 = randUint1[2];
+	if (!is_signals_code1_equal(s1, s2))
+	{
+		TEST_FAILURE;
+	}
+	s1.active_codes_number = s2.active_codes_number = 3;
+	if (   !is_signals_equal(s1, s2)
+	    ||  is_not_signals_equal(s1, s2)
+	) {
+		TEST_FAILURE;
+	}
+
+	s1.code4 = s2.code4 = randUint1[3];
+	if (!is_signals_code1_equal(s1, s2))
+	{
+		TEST_FAILURE;
+	}
+	s1.active_codes_number = s2.active_codes_number = 4;
+	if (   !is_signals_equal(s1, s2)
+	    ||  is_not_signals_equal(s1, s2)
+	) {
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+
 NEW_TEST(test_signals_compairing)
 	unsigned int randUint1[] = {
 		  23202
@@ -99,12 +172,64 @@ NEW_TEST(test_signals_compairing)
 			, randUint2[9]
 		);
 
-	
+	if (is_not_signals_equal(SIGNAL_CODE.empty, SIGNAL_CODE.empty))
+	{
+		TEST_FAILURE;
+	}
+	if (!is_signals_equal(SIGNAL_CODE.empty, SIGNAL_CODE.empty))
+	{
+		TEST_FAILURE;
+	}
 
+	for (int i = 0; i < 4; ++i)
+	{
+		if (is_signals_equal(signals1[i], signals2[i]))
+		{
+			TEST_FAILURE;
+		}
+		if (is_signals_equal(signals1[i], SIGNAL_CODE.empty))
+		{
+			TEST_FAILURE;
+		}
+		if (is_signals_equal(SIGNAL_CODE.empty, signals2[i]))
+		{
+			TEST_FAILURE;
+		}
+		if (is_not_signals_equal(signals1[i], signals1[i]))
+		{
+			TEST_FAILURE;
+		}
+		if (is_not_signals_equal(signals2[i], signals2[i]))
+		{
+			TEST_FAILURE;
+		}
+		// inverse conditions
+		if (!is_not_signals_equal(signals1[i], signals2[i]))
+		{
+			TEST_FAILURE;
+		}
+		if (!is_not_signals_equal(signals1[i], SIGNAL_CODE.empty))
+		{
+			TEST_FAILURE;
+		}
+		if (!is_not_signals_equal(SIGNAL_CODE.empty, signals2[i]))
+		{
+			TEST_FAILURE;
+		}
+		if (!is_signals_equal(signals1[i], signals1[i]))
+		{
+			TEST_FAILURE;
+		}
+		if (!is_signals_equal(signals2[i], signals2[i]))
+		{
+			TEST_FAILURE;
+		}
+	}
 TEST_FINISHED
 
 INIT_TESTS_CHECKS
 	CHECK_TEST(TEST_CHECK_UP, test_signal_code_empty);
 	CHECK_TEST(TEST_CHECK_UP, test_make_signal_codes);
+	CHECK_TEST(TEST_CHECK_UP, test_signals_internal_compairing);
 	CHECK_TEST(TEST_CHECK_UP, test_signals_compairing);
 DONE_TESTS_CHECKS

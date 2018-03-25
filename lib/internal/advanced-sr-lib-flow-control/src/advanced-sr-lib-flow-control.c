@@ -62,7 +62,7 @@ make_signal_code4(
 }
 
 bool
-is_siganls_equal(
+is_signals_equal(
 	  signal_code_t signal1
 	, signal_code_t signal2
 ) {
@@ -73,16 +73,16 @@ is_siganls_equal(
 	switch(signal1.active_codes_number)
 	{
 		case  0: return true;
-		case  1: return is_siganls_code1_equal(signal1, signal2);
-		case  2: return is_siganls_code2_equal(signal1, signal2);
-		case  3: return is_siganls_code3_equal(signal1, signal2);
-		case  4: return is_siganls_code4_equal(signal1, signal2);
+		case  1: return is_signals_code1_equal(signal1, signal2);
+		case  2: return is_signals_code2_equal(signal1, signal2);
+		case  3: return is_signals_code3_equal(signal1, signal2);
+		case  4: return is_signals_code4_equal(signal1, signal2);
 		default: return false;
 	}
 }
 
 bool
-is_siganls_code1_equal(
+is_signals_code1_equal(
 	  signal_code_t signal1
 	, signal_code_t signal2
 ) {
@@ -90,7 +90,7 @@ is_siganls_code1_equal(
 }
 
 bool
-is_siganls_code2_equal(
+is_signals_code2_equal(
 	  signal_code_t signal1
 	, signal_code_t signal2
 ) {
@@ -99,7 +99,7 @@ is_siganls_code2_equal(
 }
 
 bool
-is_siganls_code3_equal(
+is_signals_code3_equal(
 	  signal_code_t signal1
 	, signal_code_t signal2
 ) {
@@ -109,7 +109,7 @@ is_siganls_code3_equal(
 }
 
 bool
-is_siganls_code4_equal(
+is_signals_code4_equal(
 	  signal_code_t signal1
 	, signal_code_t signal2
 ) {
@@ -120,11 +120,11 @@ is_siganls_code4_equal(
 }
 
 bool
-is_not_siganls_equal(
+is_not_signals_equal(
 	  signal_code_t signal1
 	, signal_code_t signal2
 ) {
-	return !is_siganls_equal(signal1, signal2);
+	return !is_signals_equal(signal1, signal2);
 }
 
 Aflw
