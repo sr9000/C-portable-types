@@ -244,18 +244,30 @@ NEW_TEST(test_make_aflw)
 	aflw = make_aflw_signal(FLW_ST.succeeded, signal);
 	if (   !is_flow_succeeded(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, signal)
+	    || !has_aflw_signal(aflw)
+	    ||  has_not_aflw_signal(aflw)
+	    || !is_aflw_succeeded(aflw)
+	    ||  is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
 	aflw = make_aflw_signal(FLW_ST.failed, signal);
 	if (   !is_flow_failed(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, signal)
+	    || !has_aflw_signal(aflw)
+	    ||  has_not_aflw_signal(aflw)
+	    || !is_aflw_failed(aflw)
+	    || !is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
 	aflw = make_aflw_signal(FLW_ST.crashed, signal);
 	if (   !is_flow_crashed(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, signal)
+	    || !has_aflw_signal(aflw)
+	    ||  has_not_aflw_signal(aflw)
+	    || !is_aflw_crashed(aflw)
+	    || !is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
@@ -264,18 +276,30 @@ NEW_TEST(test_make_aflw)
 	aflw = make_succeeded_aflw_signal(signal);
 	if (   !is_flow_succeeded(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, signal)
+	    || !has_aflw_signal(aflw)
+	    ||  has_not_aflw_signal(aflw)
+	    || !is_aflw_succeeded(aflw)
+	    ||  is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
 	aflw = make_failed_aflw_signal(signal);
 	if (   !is_flow_failed(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, signal)
+	    || !has_aflw_signal(aflw)
+	    ||  has_not_aflw_signal(aflw)
+	    || !is_aflw_failed(aflw)
+	    || !is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
 	aflw = make_crashed_aflw_signal(signal);
 	if (   !is_flow_crashed(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, signal)
+	    || !has_aflw_signal(aflw)
+	    ||  has_not_aflw_signal(aflw)
+	    || !is_aflw_crashed(aflw)
+	    || !is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
@@ -284,18 +308,30 @@ NEW_TEST(test_make_aflw)
 	aflw = make_aflw(FLW_ST.succeeded);
 	if (   !is_flow_succeeded(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	    ||  has_aflw_signal(aflw)
+	    || !has_not_aflw_signal(aflw)
+	    || !is_aflw_succeeded(aflw)
+	    ||  is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
 	aflw = make_aflw(FLW_ST.failed);
 	if (   !is_flow_failed(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	    ||  has_aflw_signal(aflw)
+	    || !has_not_aflw_signal(aflw)
+	    || !is_aflw_failed(aflw)
+	    || !is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
 	aflw = make_aflw(FLW_ST.crashed);
 	if (   !is_flow_crashed(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	    ||  has_aflw_signal(aflw)
+	    || !has_not_aflw_signal(aflw)
+	    || !is_aflw_crashed(aflw)
+	    || !is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
@@ -304,18 +340,30 @@ NEW_TEST(test_make_aflw)
 	aflw = make_succeeded_aflw();
 	if (   !is_flow_succeeded(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	    ||  has_aflw_signal(aflw)
+	    || !has_not_aflw_signal(aflw)
+	    || !is_aflw_succeeded(aflw)
+	    ||  is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
 	aflw = make_failed_aflw();
 	if (   !is_flow_failed(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	    ||  has_aflw_signal(aflw)
+	    || !has_not_aflw_signal(aflw)
+	    || !is_aflw_failed(aflw)
+	    || !is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
 	aflw = make_crashed_aflw();
 	if (   !is_flow_crashed(aflw.flow_state)
 	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	    ||  has_aflw_signal(aflw)
+	    || !has_not_aflw_signal(aflw)
+	    || !is_aflw_crashed(aflw)
+	    || !is_not_aflw_succeeded(aflw)
 	) {
 		TEST_FAILURE;
 	}
