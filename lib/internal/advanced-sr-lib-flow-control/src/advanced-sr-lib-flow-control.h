@@ -390,7 +390,7 @@ default_aflw_processor(
 
 /**
  * @def PASS_WITH(aflw_processor_func_name)
- * @brief Like \ref PASS_WITH but uses special \ref Aflw processor.
+ * @brief Like \ref PASS but uses special \ref Aflw processor.
  * @param aflw_processor_func_name  \ref Aflw processor, see \ref
  * default_aflw_processor for details
  * @details Example usage:
@@ -421,6 +421,164 @@ default_aflw_processor(
 	{ \
 		return (aflw_processor_func_name)(AFLOW_VAR); \
 	} ;
+
+/**
+ * @def IF_AFLOW_FAILED
+ * @brief Check flow failed before \ref PASS statement.
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	signal_code_t crash_signal = make_signal_code1(666);
+ * 	FLOW aflw_another_func();
+ * 	IF_AFLOW_FAILED
+ * 		SWITCH_SIGNAL
+ * 			CASE_SIGNAL(leet_signal)
+ * 				do_some_leet_work();
+ * 				AFLOW_FINISH_FAILED_WITH(leet_signal);
+ * 			CASE_SIGNAL(zero_signal)
+ * 				do_zero_work();
+ * 				in_several_instructions();
+ * 		END_SWITCH_SIGNAL
+ * 	ELSE_IF_AFLOW_CRASHED
+ * 		AFLOW_FINISH_CRASHED_WITH(crash_signal);
+ * 	END_IF_AND_PASS;
+ * 	AFLOW_FINISH_SUCCEEDED;
+ * }
+ * @endcode.
+ */
+#define IF_AFLOW_FAILED \
+	; if (is_aflw_failed(AFLOW_VAR)) {
+
+/**
+ * @def IF_AFLOW_CRASHED
+ * @brief Check flow crashed before \ref PASS statement.
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	signal_code_t crash_signal = make_signal_code1(666);
+ * 	FLOW aflw_another_func();
+ * 	IF_AFLOW_FAILED
+ * 		SWITCH_SIGNAL
+ * 			CASE_SIGNAL(leet_signal)
+ * 				do_some_leet_work();
+ * 				AFLOW_FINISH_FAILED_WITH(leet_signal);
+ * 			CASE_SIGNAL(zero_signal)
+ * 				do_zero_work();
+ * 				in_several_instructions();
+ * 		END_SWITCH_SIGNAL
+ * 	ELSE_IF_AFLOW_CRASHED
+ * 		AFLOW_FINISH_CRASHED_WITH(crash_signal);
+ * 	END_IF_AND_PASS;
+ * 	AFLOW_FINISH_SUCCEEDED;
+ * }
+ * @endcode.
+ */
+#define IF_AFLOW_CRASHED \
+	; if (is_aflw_crashed(AFLOW_VAR)) {
+
+/**
+ * @def ELSE_IF_AFLOW_CRASHED
+ * @brief Like \ref IF_AFLOW_CRASHED but used after \ref IF_AFLOW_FAILED.
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	signal_code_t crash_signal = make_signal_code1(666);
+ * 	FLOW aflw_another_func();
+ * 	IF_AFLOW_FAILED
+ * 		SWITCH_SIGNAL
+ * 			CASE_SIGNAL(leet_signal)
+ * 				do_some_leet_work();
+ * 				AFLOW_FINISH_FAILED_WITH(leet_signal);
+ * 			CASE_SIGNAL(zero_signal)
+ * 				do_zero_work();
+ * 				in_several_instructions();
+ * 		END_SWITCH_SIGNAL
+ * 	ELSE_IF_AFLOW_CRASHED
+ * 		AFLOW_FINISH_CRASHED_WITH(crash_signal);
+ * 	END_IF_AND_PASS;
+ * 	AFLOW_FINISH_SUCCEEDED;
+ * }
+ * @endcode.
+ */
+#define ELSE_IF_AFLOW_CRASHED \
+	} else if (is_aflw_crashed(AFLOW_VAR)) {
+
+/**
+ * @def END_IF_AND_PASS
+ * @brief Like \ref PASS but should be used after \ref IF_AFLOW_FAILED ore \ref
+ * IF_AFLOW_CRASHED or \ref ELSE_IF_AFLOW_CRASHED.
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	signal_code_t crash_signal = make_signal_code1(666);
+ * 	FLOW aflw_another_func();
+ * 	IF_AFLOW_FAILED
+ * 		SWITCH_SIGNAL
+ * 			CASE_SIGNAL(leet_signal)
+ * 				do_some_leet_work();
+ * 				AFLOW_FINISH_FAILED_WITH(leet_signal);
+ * 			CASE_SIGNAL(zero_signal)
+ * 				do_zero_work();
+ * 				in_several_instructions();
+ * 		END_SWITCH_SIGNAL
+ * 	ELSE_IF_AFLOW_CRASHED
+ * 		AFLOW_FINISH_CRASHED_WITH(crash_signal);
+ * 	END_IF_AND_PASS;
+ * 	AFLOW_FINISH_SUCCEEDED;
+ * }
+ * @endcode.
+ */
+#define END_IF_AND_PASS \
+	} ; PASS ;
+
+/**
+ * @def END_IF_AND_PASS_WITH(aflw_processor_func_name)
+ * @brief Like \ref END_IF_AFLOW_AND_PASS but uses special \ref Aflw processor.
+ * @param aflw_processor_func_name  \ref Aflw processor, see \ref
+ * default_aflw_processor for details
+ * @details Example usage:
+ * @code{.c}
+ * Aflw aflw_func()
+ * {
+ * 	INIT_ADVANCED_FLOW_CONTROL;
+ * 	signal_code_t leet_signal = make_signal_code1(31337);
+ * 	signal_code_t zero_signal = make_signal_code1(0);
+ * 	signal_code_t crash_signal = make_signal_code1(666);
+ * 	FLOW aflw_another_func();
+ * 	IF_AFLOW_FAILED
+ * 		SWITCH_SIGNAL
+ * 			CASE_SIGNAL(leet_signal)
+ * 				do_some_leet_work();
+ * 				AFLOW_FINISH_FAILED_WITH(leet_signal);
+ * 			CASE_SIGNAL(zero_signal)
+ * 				do_zero_work();
+ * 				in_several_instructions();
+ * 		END_SWITCH_SIGNAL
+ * 	ELSE_IF_AFLOW_CRASHED
+ * 		AFLOW_FINISH_CRASHED_WITH(crash_signal);
+ * 	END_IF_AND_PASS;
+ * 	AFLOW_FINISH_SUCCEEDED;
+ * }
+ * @endcode.
+ */
+#define END_IF_AND_PASS_WITH(aflw_processor_func_name) \
+	} ; PASS_WITH(aflw_processor_func_name) ;
 
 /**
  * @def SWITCH_SIGNAL
