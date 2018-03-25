@@ -1,4 +1,5 @@
 #include <advanced-sr-lib-flow-control.h>
+#include <flow-control.h>
 #include "test.h"
 #include "advanced-sr-lib-flow-control.h"
 #include "internal/advanced-sr-lib-flow-control.h"
@@ -227,9 +228,103 @@ NEW_TEST(test_signals_compairing)
 	}
 TEST_FINISHED
 
+NEW_TEST(test_make_aflw)
+	unsigned int randUint1[] = {19122, 28348, 29103, 45541};
+	Aflw aflw;
+	signal_code_t signal;
+	signal =
+		make_signal_code4(
+			  randUint1[0]
+			, randUint1[1]
+			, randUint1[2]
+			, randUint1[3]
+		);
+
+	// FlwST & signal
+	aflw = make_aflw_signal(FLW_ST.succeeded, signal);
+	if (   !is_flow_succeeded(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, signal)
+	) {
+		TEST_FAILURE;
+	}
+	aflw = make_aflw_signal(FLW_ST.failed, signal);
+	if (   !is_flow_failed(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, signal)
+	) {
+		TEST_FAILURE;
+	}
+	aflw = make_aflw_signal(FLW_ST.crashed, signal);
+	if (   !is_flow_crashed(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, signal)
+	) {
+		TEST_FAILURE;
+	}
+
+	// signal ONLY
+	aflw = make_succeeded_aflw_signal(signal);
+	if (   !is_flow_succeeded(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, signal)
+	) {
+		TEST_FAILURE;
+	}
+	aflw = make_failed_aflw_signal(signal);
+	if (   !is_flow_failed(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, signal)
+	) {
+		TEST_FAILURE;
+	}
+	aflw = make_crashed_aflw_signal(signal);
+	if (   !is_flow_crashed(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, signal)
+	) {
+		TEST_FAILURE;
+	}
+
+	// FlwSt ONLY
+	aflw = make_aflw(FLW_ST.succeeded);
+	if (   !is_flow_succeeded(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	) {
+		TEST_FAILURE;
+	}
+	aflw = make_aflw(FLW_ST.failed);
+	if (   !is_flow_failed(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	) {
+		TEST_FAILURE;
+	}
+	aflw = make_aflw(FLW_ST.crashed);
+	if (   !is_flow_crashed(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	) {
+		TEST_FAILURE;
+	}
+
+	// Auto FlwST
+	aflw = make_succeeded_aflw();
+	if (   !is_flow_succeeded(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	) {
+		TEST_FAILURE;
+	}
+	aflw = make_failed_aflw();
+	if (   !is_flow_failed(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	) {
+		TEST_FAILURE;
+	}
+	aflw = make_crashed_aflw();
+	if (   !is_flow_crashed(aflw.flow_state)
+	    || !is_signals_equal(aflw.signal, SIGNAL_CODE.empty)
+	) {
+		TEST_FAILURE;
+	}
+TEST_FINISHED
+
 INIT_TESTS_CHECKS
 	CHECK_TEST(TEST_CHECK_UP, test_signal_code_empty);
 	CHECK_TEST(TEST_CHECK_UP, test_make_signal_codes);
 	CHECK_TEST(TEST_CHECK_UP, test_signals_internal_compairing);
 	CHECK_TEST(TEST_CHECK_UP, test_signals_compairing);
+	CHECK_TEST(TEST_CHECK_UP, test_make_aflw);
 DONE_TESTS_CHECKS
