@@ -32,7 +32,7 @@ Aflw failure_function()
 NEW_ATEST(second_failure_test)
 	FLOW succeeded_function() ATEST_PASS;
 	FLOW succeeded_function() ATEST_PASS;
-	FLOW failure_function() ATEST_PASS;
+	FLOW failure_function() ATEST_PASS; // should failed here
 ATEST_FINISHED
 
 INIT_ATESTS_CHECKS
